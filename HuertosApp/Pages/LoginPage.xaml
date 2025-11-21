@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Inicio de Sesión"
+    BackgroundColor="White">
+
+    <ContentPage.ToolbarItems>
+        <!-- Menú superior -->
+        <ToolbarItem
+            Text="Actualizar Datos"
+            Order="Primary"
+            Clicked="UpdateData" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="45,60"
+            Spacing="20"
+            VerticalOptions="Center"
+            HorizontalOptions="Center">
+
+            <!-- Título Principal -->
+            <Label
+                Text="Bienvenido a Producción de Semillas"
+                FontSize="20"
+                FontAttributes="Bold"
+                TextColor="#333333"
+                HorizontalOptions="Center" />
+
+            <!-- Subtítulo -->
+            <Label
+                Text="Inicia sesión para continuar"
+                FontSize="14"
+                TextColor="#777777"
+                HorizontalOptions="Center" />
+
+            <!-- Entrada de Usuario -->
+            <Frame
+                CornerRadius="10"
+                Padding="10"
+                HasShadow="False"
+                BorderColor="#DDDDDD"
+                WidthRequest="300">
+                <Entry
+                    x:Name="idEntry"
+                    Placeholder="Usuario"
+                    FontSize="16"
+                    PlaceholderColor="#B0B0B0"
+                    TextColor="Black" />
+            </Frame>
+
+            <!-- Entrada de Contraseña -->
+            <Frame
+                CornerRadius="10"
+                Padding="10"
+                HasShadow="False"
+                BorderColor="#DDDDDD"
+                WidthRequest="300">
+                <Entry
+                    x:Name="passwordEntry"
+                    Placeholder="Contraseña"
+                    FontSize="16"
+                    IsPassword="True"
+                    PlaceholderColor="#B0B0B0"
+                    TextColor="Black" />
+            </Frame>
+
+            <!-- Botón de Iniciar Sesión -->
+            <Button
+                Text="Iniciar Sesión"
+                FontSize="16"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="50"
+                WidthRequest="300"
+                Clicked="eventBtnLogin" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

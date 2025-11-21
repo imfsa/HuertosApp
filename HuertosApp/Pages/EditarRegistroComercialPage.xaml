@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.EditarRegistroComercialPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Editar Registro Comercial"
+    BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label Text="Editar Registro Comercial"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="Green"
+                   HorizontalOptions="Center" />
+
+            <!-- Fecha -->
+            <Label Text="Fecha:" FontSize="16" />
+            <DatePicker x:Name="fechaPicker" />
+
+            <!-- Genotipo -->
+            <Label Text="Genotipo:" FontSize="16" />
+            <Entry x:Name="entryGenotipo" Text="Mezcla" IsEnabled="False" />
+
+            <!-- Temporada -->
+            <Label Text="Temporada:" FontSize="16" />
+            <Picker x:Name="pickerTemporada" Title="Seleccionar Temporada">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>2024</x:String>
+                        <x:String>2025</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Predio -->
+            <Label Text="Predio:" FontSize="16" />
+            <Entry x:Name="entryPredio" Keyboard="Numeric" Placeholder="Ingrese número entero" />
+
+            <!-- Rodal -->
+            <Label Text="Rodal:" FontSize="16" />
+            <Entry x:Name="entryRodal" Keyboard="Numeric" Placeholder="Ingrese número entero" />
+
+            <!-- Kilos -->
+            <Label Text="Kilos:" FontSize="16" />
+            <Entry x:Name="entryKilos" Keyboard="Numeric" Placeholder="Ingrese valor decimal" />
+
+            <!-- Cosechador -->
+            <Label Text="Cosechadores:" FontSize="16" />
+            <CollectionView x:Name="collectionViewCosechadores" SelectionMode="Multiple">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout Spacing="10">
+                            <CheckBox IsChecked="{Binding IsSelected}" />
+                            <Label Text="{Binding Nombre}" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Modalidad Cosecha -->
+            <Label Text="Modalidad Cosecha:" FontSize="16" />
+            <Picker x:Name="pickerModalidad" Title="Seleccionar Modalidad">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Volteo</x:String>
+                        <x:String>Gavillas</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Número de árboles por día -->
+            <Label Text="N° Árboles/Día Cosechados:" FontSize="16" />
+            <Entry x:Name="entryArbolesDia" Keyboard="Numeric" Placeholder="Ingrese número entero" />
+
+            <!-- Total Árboles Cosechados -->
+            <Label Text="Total Árboles Cosechados:" FontSize="16" />
+            <Entry x:Name="entryTotalArboles" Keyboard="Numeric" Placeholder="Ingrese número entero" />
+
+            <!-- Botón Guardar -->
+            <Button Text="Guardar Cambios"
+                    FontSize="16"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    Clicked="OnSaveClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

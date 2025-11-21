@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HuertosApp.Pages.EditarRegistroFertirriegoPage"
+             Title="Editar Registro de Fertirriego">
+    <ScrollView>
+        <StackLayout Padding="20">
+            <Label Text="Editar Registro de Fertirriego" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,10" />
+
+            <!-- Campo: Huerto -->
+            <Label Text="Huerto:" FontSize="14" TextColor="Black" />
+            <Picker x:Name="PickerHuerto" Title="Selecciona una opción">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Copihueras</x:String>
+                        <x:String>Sta. Victoria</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Campo: Etapa/Fertilización -->
+            <Label Text="Etapa/Fertilización (mes):" FontSize="14" TextColor="Black" />
+            <Picker x:Name="PickerEtapa" Title="Selecciona una opción">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Noviembre</x:String>
+                        <x:String>Diciembre</x:String>
+                        <x:String>Febrero</x:String>
+                        <x:String>Marzo</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Campo: Año (No editable) -->
+            <Label Text="Año Actual:" FontSize="14" TextColor="Black" />
+            <Label x:Name="AnoActualLabel" FontSize="14" TextColor="Gray" HorizontalOptions="Start" />
+
+            <!-- Campo: Fecha de Riego -->
+            <Label Text="Fecha de Riego:" FontSize="14" TextColor="Black" />
+            <DatePicker x:Name="FechaRiegoDatePicker" />
+
+            <!-- Campo: Fertilizantes -->
+            <Label Text="Fertilizantes:" FontSize="14" TextColor="Black" />
+            <Picker x:Name="PickerFertilizantes" Title="Selecciona una opción">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Urea</x:String>
+                        <x:String>Muriato Potasio</x:String>
+                        <x:String>Sulfato de Magnesio</x:String>
+                        <x:String>Nitrato de Calcio</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Campo: Tipo de Riego -->
+            <Label Text="Tipo de Riego:" FontSize="14" TextColor="Black" />
+            <Picker x:Name="PickerTipoRiego" Title="Selecciona una opción">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Tecnificado</x:String>
+                        <x:String>Tradicional</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Campo: Sector -->
+            <Label Text="Sector:" FontSize="14" TextColor="Black" />
+            <Picker x:Name="PickerSector" Title="Selecciona una opción">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>1</x:String>
+                        <x:String>2</x:String>
+                        <x:String>Back. En</x:String>
+                        <x:String>Pr. 4ta.</x:String>
+                        <x:String>820</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <!-- Campo: Tiempo de Riego -->
+            <Label Text="Tiempo de Riego (Hrs):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="TiempoRiegoEntry" Placeholder="Ingrese tiempo en horas" Keyboard="Numeric" />
+
+            <!-- Campo: M3 Sistema -->
+            <Label Text="M³ Sistema:" FontSize="14" TextColor="Black" />
+            <Entry x:Name="M3SistemaEntry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: mm Sistema -->
+            <Label Text="mm Sistema:" FontSize="14" TextColor="Black" />
+            <Entry x:Name="MmSistemaEntry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: EVP Prom -->
+            <Label Text="EVP Prom (mm):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="EVPPromEntry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: Fertilizante Est. 1 -->
+            <Label Text="Fertilizante Est. 1 (cc):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="FertEst1Entry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: Fertilizante Est. 2 -->
+            <Label Text="Fertilizante Est. 2 (cc):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="FertEst2Entry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: Fertilizante Est. 3 -->
+            <Label Text="Fertilizante Est. 3 (cc):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="FertEst3Entry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: Fertilizante (Kg) -->
+            <Label Text="Fertilizante (Kg):" FontSize="14" TextColor="Black" />
+            <Entry x:Name="FertKgEntry" Placeholder="Ingrese valor" Keyboard="Numeric" />
+
+            <!-- Campo: Observación -->
+            <Label Text="Observación:" FontSize="14" TextColor="Black" />
+            <Editor x:Name="ObservacionEntry" Placeholder="Ingrese una observación" AutoSize="TextChanges" />
+
+            <!-- Botón para guardar -->
+            <Button Text="Guardar Cambios" Clicked="OnSaveClicked" Margin="0,20,0,0" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HuertosApp.Pages.SubmenuCosechaOperacional"
+             Title="Cosecha Operacional"
+             BackgroundColor="#0B1726">
+
+    <ContentPage.Content>
+        <Grid Padding="20"
+              RowDefinitions="Auto,*"
+              RowSpacing="20">
+
+            <!-- ENCABEZADO -->
+            <VerticalStackLayout Grid.Row="0" Spacing="4">
+                <Label Text="Cosecha Operacional"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+
+                <Label Text="Gestiona la cosecha en terreno: registra, consulta y despacha."
+                       FontSize="13"
+                       TextColor="#B0C4DE"/>
+            </VerticalStackLayout>
+
+            <!-- TARJETAS DE MENÚ -->
+            <VerticalStackLayout Grid.Row="1"
+                                 Spacing="14">
+
+                <!-- 1. Registro de cosecha -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="🌱"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Registro de Cosecha"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Captura la cosecha operativa de los árboles descargados."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnRegistroCosechaClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <!-- 2. Consultar datos de cosecha -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="📊"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Consultar Datos de Cosecha"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Revisa los registros guardados en el dispositivo."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnConsultarCosechaClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <!-- 3. Transmitir datos -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="📤"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Transmitir Datos"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Envía la información de cosecha al servidor."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnTransmitirDatosClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <!-- 4. Registro de despacho -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="🚚"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Registro de Despacho"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Agrupa cosechas en un despacho y genera folio."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnRegistroDespachoClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <!-- 5. Salir -->
+                <Button Text="⟵ Volver al menú principal"
+                        BackgroundColor="#263954"
+                        TextColor="White"
+                        CornerRadius="20"
+                        HeightRequest="44"
+                        Clicked="OnSalirClicked"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

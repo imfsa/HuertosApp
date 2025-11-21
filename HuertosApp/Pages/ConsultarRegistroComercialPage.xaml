@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HuertosApp.Pages.ConsultarRegistroComercialPage"
+             Title="Consultar Cosecha Comercial"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label Text="Consultar Cosecha Comercial"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#4CAF50"
+                   HorizontalOptions="Center" />
+
+            <!-- Fecha -->
+            <Label Text="Fecha:"
+                   FontSize="16"
+                   TextColor="Black" />
+            <DatePicker x:Name="fechaPicker"
+                        Format="dd/MM/yyyy" />
+
+            <!-- Botón Consultar -->
+            <Button Text="Consultar"
+                    FontSize="18"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    Clicked="OnConsultarClicked" />
+
+            <!-- Resultados -->
+            <Label Text="Resultados:"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="Black" />
+
+            <StackLayout x:Name="registrosLayout"
+                         Padding="5"
+                         Spacing="10" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

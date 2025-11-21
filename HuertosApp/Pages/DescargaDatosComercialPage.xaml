@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             x:Class="HuertosApp.Pages.DescargaDatosComercialPage"
+             Title="Descargar Datos Cosecha Comercial"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <!-- Título -->
+            <Label Text="Descargar Datos Cosecha Comercial"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#4CAF50"
+                   HorizontalOptions="Center" />
+
+            <!-- Selección de Fechas -->
+            <Grid ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto">
+
+                <!-- Fecha Desde -->
+                <Label Text="Fecha Desde:" FontSize="16" VerticalOptions="Center" />
+                <DatePicker x:Name="fechaDesde"
+                            Grid.Column="1"
+                            Date="{x:Static sys:DateTime.Today}" />
+
+                <!-- Fecha Hasta -->
+                <Label Text="Fecha Hasta:" FontSize="16" Grid.Row="1" VerticalOptions="Center" />
+                <DatePicker x:Name="fechaHasta"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            Date="{x:Static sys:DateTime.Today}" />
+            </Grid>
+
+            <!-- Mostrar Total de Registros -->
+            <Label x:Name="lblTotalRegistros"
+                   Text="Total de registros: 0"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center" />
+
+            <!-- Botones -->
+            <VerticalStackLayout Spacing="10">
+
+                <!-- Botón Consultar -->
+                <Button Text="Consultar Datos"
+                        FontSize="16"
+                        BackgroundColor="#2196F3"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnConsultarClicked" />
+
+                <!-- Botón Exportar a Excel -->
+                <Button Text="Exportar a Excel"
+                        FontSize="16"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnExportarExcelClicked" />
+
+                <!-- Botón Quitar Filtros -->
+                <Button Text="Quitar Filtros"
+                        FontSize="16"
+                        BackgroundColor="#FF9800"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnQuitarFiltrosClicked" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

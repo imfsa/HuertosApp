@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="HuertosApp.Pages.MenuPage"
+    Title="Menú Principal">
+
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+            <!-- Título de la página -->
+            <Label
+                Text="Menú Principal"
+                FontSize="30"
+                FontAttributes="Bold"
+                HorizontalOptions="Center"
+                TextColor="#2E8B57" />
+
+            <!-- Botón Fertirriego -->
+            <Button
+                Text="Fertirriego"
+                FontSize="20"
+                BackgroundColor="#2E8B57"
+                TextColor="White"
+                HeightRequest="50"
+                Clicked="OnFertirriegoClicked"
+                CornerRadius="10" />
+            <!-- Botón Fertirriego -->
+             <Button
+             Text="Cosecha Rodal Comercial"
+             FontSize="20"
+             BackgroundColor="#2E8B57"
+             TextColor="White"
+             HeightRequest="50"
+             Clicked="OnCosechaComercialClicked"
+             CornerRadius="10" />
+
+
+            <!-- Botón Cosecha operacional -->
+            <Button
+             Text="Cosecha Rodal Comercial"
+             FontSize="20"
+             BackgroundColor="#2E8B57"
+             TextColor="White"
+             HeightRequest="50"
+             Clicked="OnCosechaOperacionalClicked"
+             CornerRadius="10" />
+
+
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

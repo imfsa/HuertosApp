@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.NuevoRegistroFertirriegoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:System="clr-namespace:System;assembly=System.Runtime"
+    Title="Nuevo Registro Fertirriego"
+    BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label
+                Text="Formulario Fertirriego"
+                FontSize="22"
+                FontAttributes="Bold"
+                TextColor="#4CAF50"
+                HorizontalOptions="Center" />
+
+            <!-- Campos del formulario -->
+            <StackLayout Spacing="15">
+
+                <!-- Campo: Huerto -->
+                <Label Text="Huerto:" FontSize="14" TextColor="Black" />
+                <Picker x:Name="PickerHuerto" Title="Selecciona una opción">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Copihueras</x:String>
+                            <x:String>Sta. Victoria</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <!-- Campo: Etapa/Fertilización -->
+                <Label Text="Etapa/Fertilización (mes):" FontSize="14" TextColor="Black" />
+                <Picker x:Name="PickerEtapa" Title="Selecciona una opción">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Noviembre</x:String>
+                            <x:String>Diciembre</x:String>
+                            <x:String>Febrero</x:String>
+                            <x:String>Marzo</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <!-- Campo: Año (Automático) -->
+                <Label Text="Año Actual:" FontSize="14" TextColor="Black" />
+                <Label Text="{Binding Source={x:Static System:DateTime.Now}, StringFormat='{0:yyyy}'}"
+                       FontSize="14"
+                       TextColor="Gray" />
+
+                <!-- Campo: Fertilizantes --><!--
+                <Label Text="Fertilizantes:" FontSize="14" TextColor="Black" />
+                <ListView x:Name="FertilizantesListView" HasUnevenRows="True" SeparatorVisibility="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Padding="5">
+                                    <CheckBox IsChecked="{Binding IsSelected}" />
+                                    <Label Text="{Binding Nombre}" VerticalOptions="Center" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>-->
+
+
+
+                <!-- Campo: Fertilizantes con Scroll -->
+                <Label Text="Fertilizantes:" FontSize="14" TextColor="Black" />
+
+                <ScrollView HeightRequest="200">
+                    <!-- Scroll para los fertilizantes -->
+                    <ListView x:Name="FertilizantesListView" HasUnevenRows="True" SeparatorVisibility="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal" Padding="5">
+                                        <CheckBox IsChecked="{Binding IsSelected}" />
+                                        <Label Text="{Binding Nombre}" VerticalOptions="Center" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+
+
+
+
+
+                <!-- Campo: Tipo de Riego -->
+                <Label Text="Tipo de Riego:" FontSize="14" TextColor="Black" />
+                <Picker x:Name="PickerTipoRiego" Title="Selecciona una opción">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Tecnificado</x:String>
+                            <x:String>Tradicional</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+                <!-- Campo: Sector --><!--
+                <Label Text="Sector:" FontSize="14" TextColor="Black" />
+                <Picker x:Name="PickerSector" Title="Selecciona una opción">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>1</x:String>
+                            <x:String>2</x:String>
+                            <x:String>Back. En</x:String>
+                            <x:String>Pr. 4ta.</x:String>
+                            <x:String>820</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>-->
+
+                <!-- Campo: Sectores con Scroll -->
+                <Label Text="Sector:" FontSize="14" TextColor="Black" />
+
+                <ScrollView HeightRequest="200">
+                    <ListView x:Name="SectoresListView" HasUnevenRows="True" SeparatorVisibility="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal" Padding="5">
+                                        <CheckBox IsChecked="{Binding IsSelected}" />
+                                        <Label Text="{Binding Nombre}" VerticalOptions="Center" />
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollView>
+
+
+                <!-- Campo: Fecha de Riego -->
+                <Label Text="Fecha de Riego:" FontSize="14" TextColor="Black" />
+                <DatePicker x:Name="DatePickerFechaRiego" Format="dd/MM/yyyy" />
+
+                <!-- Campo: Tiempo de Riego -->
+                <Label Text="Tiempo de Riego (hrs):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryTiempoRiego" Keyboard="Numeric" Placeholder="0 - 48" />
+
+                <!-- Campo: M3 Sistema -->
+                <Label Text="M3 Sistema:" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryM3Sistema" Keyboard="Numeric" Placeholder="0 - 10000" />
+
+                <!-- Campo: mm Sistema -->
+                <Label Text="mm Sistema:" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryMmSistema" Keyboard="Numeric" Placeholder="0 - 10" />
+
+                <!-- Campo: EVP Prom -->
+                <Label Text="EVP Promedio (mm):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryEVPProm" Keyboard="Numeric" Placeholder="0 - 15" />
+
+                <!-- Campo: Fertilizante Est. 1 -->
+                <Label Text="Fertilizante Est. 1 (cc):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryFertilizanteEst1" Keyboard="Numeric" Placeholder="0 - 100000" />
+
+                <!-- Campo: Fertilizante Est. 2 -->
+                <Label Text="Fertilizante Est. 2 (cc):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryFertilizanteEst2" Keyboard="Numeric" Placeholder="0 - 100000" />
+
+                <!-- Campo: Fertilizante Est. 3 -->
+                <Label Text="Fertilizante Est. 3 (cc):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryFertilizanteEst3" Keyboard="Numeric" Placeholder="0 - 100000" />
+
+                <!-- Campo: Fertilizante (Kg) -->
+                <Label Text="Fertilizante (Kg):" FontSize="14" TextColor="Black" />
+                <Entry x:Name="EntryFertilizanteKg" Keyboard="Numeric" Placeholder="0 - 2000" />
+
+                <!-- Campo: Observación -->
+                <Label Text="Observación:" FontSize="14" TextColor="Black" />
+                <Editor x:Name="EntryObservacion" HeightRequest="80" Placeholder="Agrega tus comentarios..." />
+
+                <!-- Campo: Fotografía -->
+                <Label Text="Fotografía:" FontSize="16" TextColor="Black" />
+                <Image
+                    x:Name="FotoCapturada"
+                    HeightRequest="200"
+                    WidthRequest="200"
+                    Aspect="AspectFill"
+                    Margin="10" />
+                <Button
+                    Text="Capturar Foto"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    Clicked="OnCapturePhotoClicked" />
+
+                <!-- Botón para guardar -->
+                <Button
+                    Text="Guardar"
+                    FontSize="16"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Clicked="OnSaveClicked" />
+            </StackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

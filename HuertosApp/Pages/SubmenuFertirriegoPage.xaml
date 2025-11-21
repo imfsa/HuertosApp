@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.SubmenuFertirriegoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Submenú Fertirriego"
+    BackgroundColor="#F0F8FF">
+
+    <ContentPage.Resources>
+        <!-- Estilo para los botones del menú -->
+        <Style x:Key="MenuButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#2E8B57" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="HeightRequest" Value="55" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="FontAttributes" Value="Bold" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="20,40" Spacing="20">
+                <!-- Encabezado -->
+                <Label
+                    Text="Submenú Fertirriego"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"
+                    TextColor="#2E8B57" />
+
+                <Label
+                    Text="Seleccione una opción:"
+                    FontSize="18"
+                    HorizontalOptions="Center"
+                    TextColor="#555555" />
+
+                <!-- Botones de Menú -->
+                <Button
+                    x:Name="btnIngresarDatos"
+                    Text="Ingresar Datos"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Clicked="OnIngresarDatosClicked" />
+
+                <Button
+                    x:Name="btnConsultarDatos"
+                    Text="Consultar Datos"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Clicked="OnConsultarDatosClicked" />
+
+                <Button
+                    x:Name="btnTransmitirDatos"
+                    Text="Transmitir Datos"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Clicked="OnTransmitirDatosClicked" />
+                <Button
+                    x:Name="btnDescargarDatos"
+                    Text="Descargar Datos"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Clicked="OnDescargarDatosClicked" />
+
+                <Button
+                    x:Name="btnLimpiarDatos"
+                    Text="Limpiar Datos"
+                    Style="{StaticResource MenuButtonStyle}"
+                    Clicked="OnLimpiarDatosClicked" />
+
+                <Button
+                    x:Name="btnSalir"
+                    Text="Salir"
+                    Style="{StaticResource MenuButtonStyle}"
+                    BackgroundColor="#FF3333"
+                    Clicked="OnSalirClicked" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

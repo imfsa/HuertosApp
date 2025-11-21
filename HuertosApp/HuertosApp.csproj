@@ -1,0 +1,132 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- ============================
+       CONFIGURACIÓN PRINCIPAL
+       ============================ -->
+	<PropertyGroup>
+		<!-- SOLO .NET 9 -->
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-windows10.0.19041.0</TargetFrameworks>
+
+		<OutputType>Exe</OutputType>
+		<RootNamespace>HuertosApp</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<!-- App -->
+		<ApplicationTitle>HuertosApp</ApplicationTitle>
+		<ApplicationId>com.companyname.huertosapp</ApplicationId>
+
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<!-- SO Compatibility -->
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+
+		<!-- WINDOWS -->
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+			10.0.19041.0
+		</SupportedOSPlatformVersion>
+
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+			10.0.19041.0
+		</TargetPlatformMinVersion>
+
+		<!-- Tizen (si en futuro se activa) -->
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+
+	<!-- ============================
+       RECURSOS
+       ============================ -->
+	<ItemGroup>
+		<!-- Icono -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Imágenes -->
+		<MauiImage Include="Resources\Images\*" />
+		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
+
+		<!-- Fuentes -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+
+	<!-- ============================
+       PAQUETES NUGET GENERALES
+       ============================ -->
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.104.2" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+		<PackageReference Include="SkiaSharp" Version="3.118.0-preview.2.3" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+	</ItemGroup>
+
+
+	<!-- ============================
+       ZXING PARA PLATAFORMAS .NET 9
+       ============================ -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<PackageReference Include="ZXing.Net.Maui" Version="0.6.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.6.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<PackageReference Include="ZXing.Net.Maui" Version="0.6.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.6.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-windows10.0.19041.0'">
+		<PackageReference Include="ZXing.Net.Maui" Version="0.6.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.6.0" />
+	</ItemGroup>
+
+
+	<!-- ============================
+       XAML / C# RECURSOS DE PÁGINAS
+       ============================ -->
+	<ItemGroup>
+		<Compile Update="Pages\ConsultarRegistroComercialPage.xaml.cs">
+			<DependentUpon>ConsultarRegistroComercialPage.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Pages\DescargaDatosComercialPage.xaml.cs">
+			<DependentUpon>DescargaDatosComercialPage.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<MauiXaml Update="Pages\ConsultarRegistroComercialPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\ConsultarFertirriegoPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\DescargaDatosPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\DescargaDatosComercialPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\EditarRegistroComercialPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\EditarRegistroFertirriegoPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\LoginPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\MenuPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\NuevoRegistroComercialPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\NuevoRegistroCosechaPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\NuevoRegistroFertirriegoPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\SubmenuCosechaComercial.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\SubmenuCosechaOperacional.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\SubmenuFertirriegoPage.xaml" Generator="MSBuild:Compile" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.NuevoRegistroCosechaPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.Maui.Controls"
+    Title="Registro de Cosecha Operacional">
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto,*">
+            <!-- BLOQUE SCANNER -->
+            <Grid
+                Row="0"
+                BackgroundColor="#111"
+                HeightRequest="260">
+
+                <zxing:CameraBarcodeReaderView
+                    x:Name="cameraView"
+                    Margin="10"
+                    BarcodesDetected="CameraView_BarcodesDetected"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill" />
+
+                <!-- Texto overlay -->
+                <Label
+                    Margin="0,8"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    Text="Apunta el código QR del árbol"
+                    TextColor="White"
+                    FontAttributes="Bold" />
+
+                <!-- Botón para reanudar escaneo -->
+                <Button
+                    x:Name="btnReanudar"
+                    Margin="10"
+                    Padding="10,4"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    BackgroundColor="#222"
+                    BorderColor="#fff"
+                    BorderWidth="1"
+                    CornerRadius="18"
+                    Text="Reanudar escaneo"
+                    TextColor="White"
+                    Clicked="BtnReanudar_Clicked" />
+            </Grid>
+
+            <!-- FORMULARIO -->
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout
+                    Padding="16"
+                    Spacing="8">
+
+                    <Label Text="Datos del árbol" FontAttributes="Bold" FontSize="18" />
+
+                    <!-- ID ÁRBOL (no modificable) -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Label
+                            VerticalOptions="Center"
+                            WidthRequest="110"
+                            Text="ID Árbol:" />
+                        <Entry
+                            x:Name="TreeIdEntry"
+                            HorizontalOptions="FillAndExpand"
+                            IsReadOnly="True"
+                            Placeholder="Escanee un QR..." />
+                    </HorizontalStackLayout>
+
+                    <!-- Fecha cosecha (hoy, solo lectura) -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Label
+                            VerticalOptions="Center"
+                            WidthRequest="110"
+                            Text="Fecha:" />
+                        <Entry
+                            x:Name="FechaEntry"
+                            HorizontalOptions="FillAndExpand"
+                            IsReadOnly="True" />
+                    </HorizontalStackLayout>
+
+                    <!-- Campos autocompletados por el árbol -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Temporada:" />
+                        <Entry x:Name="TemporadaEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Genotipo:" />
+                        <Entry x:Name="GenotipoEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Especie:" />
+                        <Entry x:Name="EspecieEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Réplica:" />
+                        <Entry x:Name="ReplicaEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Fila:" />
+                        <Entry x:Name="FilaEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Columna:" />
+                        <Entry x:Name="ColumnaEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Predio:" />
+                        <Entry x:Name="PredioEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Cod. Huerto:" />
+                        <Entry x:Name="CodHuertoEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label WidthRequest="110" VerticalOptions="Center" Text="Huerto:" />
+                        <Entry x:Name="HuertoNombreEntry" IsReadOnly="True" HorizontalOptions="FillAndExpand" />
+                    </HorizontalStackLayout>
+
+                    <BoxView HeightRequest="1" Color="#dddddd" Margin="0,12" />
+
+                    <!-- KILOS -->
+                    <Label Text="Datos de cosecha" FontAttributes="Bold" FontSize="18" />
+
+                    <HorizontalStackLayout Spacing="8">
+                        <Label
+                            VerticalOptions="Center"
+                            WidthRequest="110"
+                            Text="Kilos:" />
+                        <Entry
+                            x:Name="KilosEntry"
+                            HorizontalOptions="FillAndExpand"
+                            Keyboard="Numeric"
+                            Placeholder="Ej: 85.3" />
+                    </HorizontalStackLayout>
+
+                    <!-- COSECHADORES -->
+                    <Label Text="Cosechadores" FontAttributes="Bold" />
+
+                    <CollectionView
+                        x:Name="collectionViewCosechadores"
+                        SelectionMode="None"
+                        HeightRequest="160">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="Auto,*" Padding="4">
+                                    <CheckBox
+                                        IsChecked="{Binding IsSelected}"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        Grid.Column="1"
+                                        Margin="8,0,0,0"
+                                        Text="{Binding Nombre}"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- ESTADO DESPACHO (solo info, por ahora siempre NO) -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Label
+                            VerticalOptions="Center"
+                            WidthRequest="110"
+                            Text="Despachado:" />
+                        <Entry
+                            x:Name="EstadoDespachoEntry"
+                            HorizontalOptions="FillAndExpand"
+                            IsReadOnly="True"
+                            Text="NO" />
+                    </HorizontalStackLayout>
+
+                    <!-- BOTONES -->
+                    <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
+                        <Button
+                            Grid.Column="0"
+                            BackgroundColor="#2563EB"
+                            CornerRadius="20"
+                            Text="Registrar"
+                            TextColor="White"
+                            Clicked="BtnRegistrar_Clicked" />
+
+                        <Button
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
+                            BackgroundColor="#6B7280"
+                            CornerRadius="20"
+                            Text="Volver"
+                            TextColor="White"
+                            Clicked="BtnVolver_Clicked" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

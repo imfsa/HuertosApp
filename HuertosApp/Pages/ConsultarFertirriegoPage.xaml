@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.ConsultarFertirriegoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Consultar Fertirriego"
+    BackgroundColor="White">
+
+    <ContentPage.Content>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Título -->
+            <Label
+                Text="Consulta de Fertirriego"
+                FontSize="22"
+                FontAttributes="Bold"
+                TextColor="#4CAF50"
+                HorizontalOptions="Center" />
+
+            <!-- Selección de Fecha -->
+            <Label Text="Seleccionar Fecha:" FontSize="16" TextColor="Black" />
+            <DatePicker x:Name="fechaPicker"
+                        Format="dd/MM/yyyy" />
+
+            <!-- Botón de Consulta -->
+            <Button
+                Text="Consultar"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                FontSize="16"
+                HeightRequest="45"
+                CornerRadius="10"
+                Clicked="OnConsultarClicked" />
+
+            <!-- Contenedor Scroll para los registros -->
+            <ScrollView VerticalOptions="FillAndExpand">
+                <StackLayout x:Name="registrosLayout" Spacing="10">
+                    <!-- Registros cargados dinámicamente -->
+                </StackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+</ContentPage>
