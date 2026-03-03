@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HuertosApp.Pages.SubmenuDespachoPage"
+             Title="Registro de despacho"
+             BackgroundColor="#0B1726">
+
+    <ContentPage.Content>
+        <Grid Padding="20"
+              RowDefinitions="Auto,*"
+              RowSpacing="20">
+
+            <!-- ENCABEZADO -->
+            <VerticalStackLayout Grid.Row="0" Spacing="4">
+                <Label Text="Registro de despacho"
+                       FontSize="22"
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+
+                <Label Text="Agrupa cosechas pendientes en un folio y genera el Excel oficial."
+                       FontSize="13"
+                       TextColor="#B0C4DE"/>
+            </VerticalStackLayout>
+
+            <!-- TARJETAS MENÚ -->
+            <VerticalStackLayout Grid.Row="1" Spacing="14">
+
+                <!-- NUEVO DESPACHO -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="🧾"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Nuevo despacho"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Selecciona cosechas pendientes y genera un folio con Excel."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnNuevoDespachoClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <!-- CONSULTAR DESPACHOS -->
+                <Frame CornerRadius="16"
+                       Padding="14"
+                       BackgroundColor="#12243A"
+                       HasShadow="True">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="12">
+                        <Label Text="📂"
+                               FontSize="26"
+                               VerticalOptions="Center"/>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Consultar despachos"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="White"/>
+                            <Label Text="Busca folios anteriores y descarga el Excel generado."
+                                   FontSize="12"
+                                   TextColor="#B0C4DE"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.ColumnSpan="2"
+                                BackgroundColor="Transparent"
+                                Text=""
+                                Clicked="OnConsultarDespachosClicked"
+                                HorizontalOptions="Fill"
+                                VerticalOptions="Fill"
+                                Opacity="0" />
+                    </Grid>
+                </Frame>
+
+                <Button Text="⟵ Volver al menú principal"
+                        BackgroundColor="#263954"
+                        TextColor="White"
+                        CornerRadius="20"
+                        HeightRequest="44"
+                        Clicked="OnSalirClicked"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

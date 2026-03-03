@@ -1,53 +1,199 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    x:Class="HuertosApp.Pages.MenuPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="HuertosApp.Pages.MenuPage"
     Title="Menú Principal">
 
+    <!-- Fondo general -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#0F172A" Offset="0.0" />
+            <GradientStop Color="#1F2937" Offset="0.5" />
+            <GradientStop Color="#111827" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
     <ContentPage.Content>
-        <StackLayout Padding="20" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
-            <!-- Título de la página -->
-            <Label
-                Text="Menú Principal"
-                FontSize="30"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"
-                TextColor="#2E8B57" />
+        <ScrollView>
+            <VerticalStackLayout
+                Padding="24,40,24,24"
+                Spacing="24">
 
-            <!-- Botón Fertirriego -->
-            <Button
-                Text="Fertirriego"
-                FontSize="20"
-                BackgroundColor="#2E8B57"
-                TextColor="White"
-                HeightRequest="50"
-                Clicked="OnFertirriegoClicked"
-                CornerRadius="10" />
-            <!-- Botón Fertirriego -->
-             <Button
-             Text="Cosecha Rodal Comercial"
-             FontSize="20"
-             BackgroundColor="#2E8B57"
-             TextColor="White"
-             HeightRequest="50"
-             Clicked="OnCosechaComercialClicked"
-             CornerRadius="10" />
+                <!-- Encabezado -->
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="HuertosApp"
+                           FontSize="14"
+                           TextColor="#9CA3AF"
+                           FontAttributes="Bold" />
+
+                    <Label Text="Menú principal"
+                           FontSize="26"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="Selecciona el módulo con el que quieres trabajar hoy."
+                           FontSize="13"
+                           TextColor="#D1D5DB" />
+                </VerticalStackLayout>
+
+                <!-- Chips de contexto -->
+                <HorizontalStackLayout Spacing="8">
+                    <Frame Padding="10,4"
+                           BackgroundColor="#064E3B"
+                           CornerRadius="16"
+                           HasShadow="False"
+                           BorderColor="#10B981">
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="🌲" FontSize="14" />
+                            <Label Text="Operaciones en terreno"
+                                   TextColor="#ECFDF5"
+                                   FontSize="12" />
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                    <Frame Padding="10,4"
+                           BackgroundColor="#1D4ED8"
+                           CornerRadius="16"
+                           HasShadow="False"
+                           BorderColor="#60A5FA">
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="📡" FontSize="14" />
+                            <Label Text="Trabajo offline"
+                                   TextColor="#EFF6FF"
+                                   FontSize="12" />
+                        </HorizontalStackLayout>
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <!-- ================= TARJETA FERTIRRIEGO ================= -->
+                <Frame Padding="16"
+                       CornerRadius="20"
+                       BackgroundColor="#F9FAFB"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="12">
+                            <!-- FERTIRRIEGO -->
+                            <Frame WidthRequest="44"
+                                   HeightRequest="44"
+                                   CornerRadius="22"
+                                   BackgroundColor="#DCFCE7"
+                                   HasShadow="False"
+                                   Padding="0">
+                                <Label Text="💧"
+                                       FontSize="24"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Frame>
+
+                            <!-- Título + descripción -->
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Fertirriego"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       TextColor="#111827" />
+                                <Label Text="Fertilización y riego por sector."
+                                       FontSize="12"
+                                       TextColor="#6B7280" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <Button Text="Ingresar"
+                                BackgroundColor="#16A34A"
+                                TextColor="White"
+                                CornerRadius="18"
+                                HeightRequest="42"
+                                FontSize="14"
+                                Clicked="OnFertirriegoClicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- ================= TARJETA COSECHA RODAL COMERCIAL ================= -->
+                <Frame Padding="16"
+                       CornerRadius="20"
+                       BackgroundColor="#F9FAFB"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="12">
+
+                            <!-- COSECHA RODAL COMERCIAL -->
+                            <Frame WidthRequest="44"
+                               HeightRequest="44"
+                               CornerRadius="22"
+                               BackgroundColor="#DBEAFE"
+                               HasShadow="False"
+                               Padding="0">
+                                                    <Label Text="🚜"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />          
+                            </Frame>
 
 
-            <!-- Botón Cosecha operacional -->
-            <Button
-             Text="Cosecha Rodal Comercial"
-             FontSize="20"
-             BackgroundColor="#2E8B57"
-             TextColor="White"
-             HeightRequest="50"
-             Clicked="OnCosechaOperacionalClicked"
-             CornerRadius="10" />
 
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Cosecha Rodal Comercial"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       TextColor="#111827" />
+                                <Label Text="Control de cosecha y producción por rodal."
+                                       FontSize="12"
+                                       TextColor="#6B7280" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
 
+                        <Button Text="Ingresar"
+                                BackgroundColor="#2563EB"
+                                TextColor="White"
+                                CornerRadius="18"
+                                HeightRequest="42"
+                                FontSize="14"
+                                Clicked="OnCosechaComercialClicked" />
+                    </VerticalStackLayout>
+                </Frame>
 
+                <!-- ================= TARJETA COSECHA OPERACIONAL ================= -->
+                <Frame Padding="16"
+                       CornerRadius="20"
+                       BackgroundColor="#F9FAFB"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="10">
+                        <HorizontalStackLayout Spacing="12">
+                            <!-- COSECHA OPERACIONAL -->
+                            <Frame WidthRequest="44"
+                               HeightRequest="44"
+                               CornerRadius="22"
+                               BackgroundColor="#FEF3C7"
+                               HasShadow="False"
+                               Padding="0">
+                               <Label Text="📦"
+                                   FontSize="24"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center" />              
+                            </Frame>
 
-        </StackLayout>
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Cosecha Operacional"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       TextColor="#111827" />
+                                <Label Text="Registro detallado de kilos por árbol en terreno."
+                                       FontSize="12"
+                                       TextColor="#6B7280" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+
+                        <Button Text="Ingresar"
+                                BackgroundColor="#F59E0B"
+                                TextColor="White"
+                                CornerRadius="18"
+                                HeightRequest="42"
+                                FontSize="14"
+                                Clicked="OnCosechaOperacionalClicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

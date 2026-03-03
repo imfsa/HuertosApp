@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.NuevoDespachoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Nuevo despacho"
+    BackgroundColor="#F2F2F5">
+
+    <ContentPage.Content>
+        <Grid Padding="16" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="12">
+
+            <!-- TARJETA PRINCIPAL: TÍTULO + FILTRO -->
+            <Frame
+                Grid.Row="0"
+                CornerRadius="16"
+                BackgroundColor="White"
+                HasShadow="True"
+                Padding="16">
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Nuevo registro de despacho"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#333333" />
+
+                    <Label
+                        Text="Consulta las cosechas pendientes de despacho, selecciónalas y genera el folio con su Excel."
+                        FontSize="13"
+                        TextColor="#666666" />
+
+                    <!-- FILTRO FECHA DESDE / HASTA -->
+                    <Grid
+                        Margin="0,8,0,0"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="8">
+
+                        <VerticalStackLayout>
+                            <Label
+                                Text="Desde"
+                                FontSize="12"
+                                TextColor="#4B5563" />
+                            <DatePicker
+                                x:Name="FechaDesdePicker" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label
+                                Text="Hasta"
+                                FontSize="12"
+                                TextColor="#4B5563" />
+                            <DatePicker
+                                x:Name="FechaHastaPicker" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- BOTÓN CONSULTAR -->
+                    <Button
+                        x:Name="BtnConsultar"
+                        Text="Consultar cosechas pendientes"
+                        Margin="0,8,0,0"
+                        BackgroundColor="#1976D2"
+                        TextColor="White"
+                        CornerRadius="22"
+                        HeightRequest="44"
+                        FontAttributes="Bold"
+                        Clicked="BtnConsultar_Clicked" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- TARJETAS RESUMEN + TEXTO -->
+            <VerticalStackLayout Grid.Row="1" Spacing="4">
+
+                <HorizontalStackLayout Spacing="12">
+
+                    <!-- Pendientes -->
+                    <Frame
+                        HasShadow="True"
+                        CornerRadius="14"
+                        Padding="12"
+                        BackgroundColor="White"
+                        HorizontalOptions="FillAndExpand">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="📦"
+                                FontSize="22"
+                                VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label
+                                    Text="Pendientes en rango"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    TextColor="#555555" />
+                                <Label
+                                    x:Name="LblTotalPendientes"
+                                    Text="0"
+                                    FontSize="20"
+                                    FontAttributes="Bold"
+                                    TextColor="#333333" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+
+                    <!-- Kilos seleccionados -->
+                    <Frame
+                        HasShadow="True"
+                        CornerRadius="14"
+                        Padding="12"
+                        BackgroundColor="White"
+                        HorizontalOptions="FillAndExpand">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <Label
+                                Grid.Column="0"
+                                Text="⚖️"
+                                FontSize="22"
+                                VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label
+                                    Text="Kilos seleccionados"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    TextColor="#555555" />
+                                <Label
+                                    x:Name="LblTotalKilosSeleccionados"
+                                    Text="0,0"
+                                    FontSize="20"
+                                    FontAttributes="Bold"
+                                    TextColor="#333333" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+                </HorizontalStackLayout>
+
+                <!-- Resumen textual -->
+                <Label
+                    x:Name="lblResumen"
+                    Text="Pendientes: 0 • Seleccionados: 0 • Kilos seleccionados: 0,0"
+                    FontSize="12"
+                    TextColor="#4B5563" />
+            </VerticalStackLayout>
+
+            <!-- LISTA DE PENDIENTES -->
+            <CollectionView
+                x:Name="listaPendientes"
+                Grid.Row="2"
+                Margin="0,4,0,4"
+                SelectionMode="None"
+                IsVisible="False">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="0,4"
+                            Padding="10"
+                            CornerRadius="14"
+                            BackgroundColor="White"
+                            BorderColor="#E5E7EB"
+                            HasShadow="True">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+
+                                <!-- Check selección -->
+                                <CheckBox
+                                    Grid.Column="0"
+                                    VerticalOptions="Center"
+                                    IsChecked="{Binding IsSelected}"
+                                    CheckedChanged="OnCheckChanged" />
+
+                                <!-- Detalle del registro -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label
+                                            Text="{Binding rc_id, StringFormat='N° {0}'}"
+                                            FontAttributes="Bold"
+                                            FontSize="13"
+                                            TextColor="#111827" />
+                                        <Label
+                                            Text="{Binding kilos, StringFormat='{0} kg'}"
+                                            FontSize="13"
+                                            FontAttributes="Bold"
+                                            TextColor="#1976D2"
+                                            HorizontalOptions="EndAndExpand" />
+                                    </HorizontalStackLayout>
+
+                                    <Label
+                                        Text="{Binding fecha_cosecha, StringFormat='Fecha: {0}'}"
+                                        FontSize="12"
+                                        TextColor="#4B5563" />
+
+                                    <Label
+                                        Text="{Binding huerto_nombre, StringFormat='Huerto: {0}'}"
+                                        FontSize="12"
+                                        TextColor="#4B5563" />
+
+                                    <Label
+                                        Text="{Binding genotipo, StringFormat='Genotipo: {0}'}"
+                                        FontSize="12"
+                                        TextColor="#4B5563" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- MENSAJE SIN RESULTADOS -->
+            <Label
+                x:Name="LblSinResultados"
+                Grid.Row="2"
+                Text="No hay cosechas pendientes para el rango de fechas seleccionado."
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="14"
+                FontAttributes="Italic"
+                TextColor="#6B7280"
+                IsVisible="False" />
+
+            <!-- BOTÓN DESPACHAR + ACTIVITY -->
+            <Grid
+                Grid.Row="3"
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="12">
+
+                <Button
+                    Grid.Column="0"
+                    x:Name="BtnGenerar"
+                    Text="Generar despacho y Excel"
+                    BackgroundColor="#10B981"
+                    TextColor="White"
+                    CornerRadius="24"
+                    HeightRequest="48"
+                    FontAttributes="Bold"
+                    Clicked="GenerarDespacho_Clicked" />
+
+                <ActivityIndicator
+                    Grid.Column="1"
+                    x:Name="Activity"
+                    WidthRequest="32"
+                    HeightRequest="32"
+                    IsRunning="False"
+                    IsVisible="False" />
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

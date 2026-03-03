@@ -40,7 +40,7 @@ namespace HuertosApp.Pages
             DateTime desde = fechaDesde.Date;
             DateTime hasta = fechaHasta.Date;
 
-            string url = $"http://179.61.13.234:8089/ws_huertosapp/datos_cosechacomercial.php?desde={desde:yyyy-MM-dd}&hasta={hasta:yyyy-MM-dd}";
+            string url = $"https://api.imf.cl:8443/huertosapp/datos_cosechacomercial.php?desde={desde:yyyy-MM-dd}&hasta={hasta:yyyy-MM-dd}";
 
             using (var httpClient = new HttpClient())
             {
@@ -85,7 +85,7 @@ namespace HuertosApp.Pages
             DateTime desde = fechaDesde.Date;
             DateTime hasta = fechaHasta.Date;
 
-            string url = $"http://179.61.13.234:8089/ws_huertosapp/datos_cosechacomercial.php?desde={desde:yyyy-MM-dd}&hasta={hasta:yyyy-MM-dd}";
+            string url = $"https://api.imf.cl:8443/huertosapp/datos_cosechacomercial.php?desde={desde:yyyy-MM-dd}&hasta={hasta:yyyy-MM-dd}";
 
             using (var httpClient = new HttpClient())
             {

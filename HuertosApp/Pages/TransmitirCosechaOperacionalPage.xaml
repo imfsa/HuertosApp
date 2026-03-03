@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.TransmitirCosechaOperacionalPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Transmitir Cosecha"
+    BackgroundColor="#F2F2F5">
+
+    <ContentPage.Content>
+        <Grid Padding="16" RowDefinitions="Auto,Auto,*,Auto" RowSpacing="16">
+
+            <!-- TARJETA PRINCIPAL: RESUMEN Y EXPLICACIÓN -->
+            <Frame
+                Grid.Row="0"
+                CornerRadius="16"
+                BackgroundColor="White"
+                HasShadow="True"
+                Padding="16">
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Transmitir registros de cosecha"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#333333" />
+
+                    <Label
+                        Text="Se enviarán al servidor todos los registros de cosecha que aún no han sido sincronizados."
+                        FontSize="13"
+                        TextColor="#666666" />
+
+                    <!-- Resumen de pendientes -->
+                    <Frame
+                        CornerRadius="12"
+                        BackgroundColor="#F3F4F6"
+                        Padding="10"
+                        HasShadow="False">
+                        <HorizontalStackLayout Spacing="8">
+                            <Label
+                                Text="⏳"
+                                FontSize="20"
+                                VerticalOptions="Center" />
+                            <Label
+                                x:Name="LblResumen"
+                                Text="Pendientes: 0"
+                                FontSize="13"
+                                TextColor="#374151"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Frame>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- SUBTÍTULO LISTA -->
+            <Label
+                Grid.Row="1"
+                Text="Detalle de registros pendientes de transmisión"
+                FontSize="13"
+                FontAttributes="Bold"
+                TextColor="#4B5563" />
+
+            <!-- LISTA DE PENDIENTES -->
+            <CollectionView
+                Grid.Row="2"
+                x:Name="ListaPendientes"
+                Margin="0,4,0,4"
+                IsVisible="False">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Padding="12"
+                            CornerRadius="14"
+                            BackgroundColor="White"
+                            BorderColor="#E5E7EB"
+                            HasShadow="True"
+                            Margin="0,4">
+
+                            <VerticalStackLayout Spacing="4">
+
+                                <!-- CABECERA: Árbol (izq) + Kilos (der) -->
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label
+                                        Text="{Binding TreeId, StringFormat='Árbol #{0}'}"
+                                        FontSize="15"
+                                        FontAttributes="Bold"
+                                        TextColor="#111827" />
+
+                                    <!-- Con esto queda pegado a la derecha -->
+                                    <Label
+                                        Text="{Binding Kilos, StringFormat='{0:N1} kg'}"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        TextColor="#1976D2"
+                                        HorizontalOptions="EndAndExpand" />
+                                </HorizontalStackLayout>
+
+                                <!-- Detalles -->
+                                <Label
+                                    Text="{Binding FechaCosecha, StringFormat='Fecha: {0}'}"
+                                    FontSize="12"
+                                    TextColor="#4B5563" />
+
+                                <Label
+                                    Text="{Binding Genotipo, StringFormat='Genotipo: {0}'}"
+                                    FontSize="12"
+                                    TextColor="#4B5563" />
+
+                                <Label
+                                    Text="{Binding HuertoNombre, StringFormat='Huerto: {0}'}"
+                                    FontSize="12"
+                                    TextColor="#4B5563" />
+                            </VerticalStackLayout>
+
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- MENSAJE CUANDO NO HAY PENDIENTES -->
+            <Label
+                x:Name="LblSinPendientes"
+                Grid.Row="2"
+                Text="No hay registros pendientes de transmisión."
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="14"
+                FontAttributes="Italic"
+                TextColor="#6B7280"
+                IsVisible="False" />
+
+            <!-- BOTÓN + ACTIVITY -->
+            <Grid
+                Grid.Row="3"
+                ColumnDefinitions="*,Auto"
+                ColumnSpacing="12">
+
+                <Button
+                    x:Name="BtnTransmitir"
+                    Grid.Column="0"
+                    Text="Transmitir pendientes"
+                    BackgroundColor="#10B981"
+                    TextColor="White"
+                    CornerRadius="22"
+                    HeightRequest="46"
+                    FontAttributes="Bold"
+                    Clicked="BtnTransmitir_Clicked" />
+
+                <ActivityIndicator
+                    x:Name="Activity"
+                    Grid.Column="1"
+                    WidthRequest="32"
+                    HeightRequest="32"
+                    IsRunning="False"
+                    IsVisible="False" />
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

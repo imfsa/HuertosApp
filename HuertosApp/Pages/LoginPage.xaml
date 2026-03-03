@@ -1,82 +1,224 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
+<ContentPage 
     x:Class="HuertosApp.Pages.LoginPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Inicio de Sesión"
+    Title="" 
     BackgroundColor="White">
-
+    
     <ContentPage.ToolbarItems>
-        <!-- Menú superior -->
-        <ToolbarItem
-            Text="Actualizar Datos"
-            Order="Primary"
-            Clicked="UpdateData" />
+        <ToolbarItem 
+            Text="⋮ Menú"
+            Clicked="OnMenuClicked" 
+            Order="Primary" />
     </ContentPage.ToolbarItems>
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="45,60"
-            Spacing="20"
-            VerticalOptions="Center"
-            HorizontalOptions="Center">
+    <ContentPage.Resources>
+        <Style x:Key="ModernEntryStyle" TargetType="Entry">
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="HeightRequest" Value="55" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextColor" Value="#333333" />
+            <Setter Property="PlaceholderColor" Value="#A0A0A0" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="Margin" Value="15,0" />
+        </Style>
+    </ContentPage.Resources>
 
-            <!-- Título Principal -->
-            <Label
-                Text="Bienvenido a Producción de Semillas"
-                FontSize="20"
-                FontAttributes="Bold"
-                TextColor="#333333"
-                HorizontalOptions="Center" />
+    <Grid>
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Padding="30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <!-- Subtítulo -->
-            <Label
-                Text="Inicia sesión para continuar"
-                FontSize="14"
-                TextColor="#777777"
-                HorizontalOptions="Center" />
+            <!-- LOGO Y TÍTULOS -->
+            <VerticalStackLayout Grid.Row="1" Spacing="5" HorizontalOptions="Center">
+                <Image 
+                    Source="logo.png" 
+                    HeightRequest="150" 
+                    WidthRequest="150"
+                    Aspect="AspectFit" />
 
-            <!-- Entrada de Usuario -->
-            <Frame
-                CornerRadius="10"
-                Padding="10"
-                HasShadow="False"
-                BorderColor="#DDDDDD"
-                WidthRequest="300">
-                <Entry
-                    x:Name="idEntry"
-                    Placeholder="Usuario"
-                    FontSize="16"
-                    PlaceholderColor="#B0B0B0"
-                    TextColor="Black" />
-            </Frame>
+                <Label 
+                    Text="HuertosApp" 
+                    FontSize="18" 
+                    HorizontalOptions="Center" 
+                    TextColor="#39b75f"
+                    FontAttributes="Bold" />
 
-            <!-- Entrada de Contraseña -->
-            <Frame
-                CornerRadius="10"
-                Padding="10"
-                HasShadow="False"
-                BorderColor="#DDDDDD"
-                WidthRequest="300">
-                <Entry
-                    x:Name="passwordEntry"
-                    Placeholder="Contraseña"
-                    FontSize="16"
-                    IsPassword="True"
-                    PlaceholderColor="#B0B0B0"
-                    TextColor="Black" />
-            </Frame>
+                <Label 
+                    Text="Bienvenido" 
+                    FontSize="34" 
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center" 
+                    TextColor="#1B5E20" />
 
-            <!-- Botón de Iniciar Sesión -->
-            <Button
-                Text="Iniciar Sesión"
-                FontSize="16"
-                BackgroundColor="#4CAF50"
-                TextColor="White"
-                CornerRadius="10"
-                HeightRequest="50"
-                WidthRequest="300"
-                Clicked="eventBtnLogin" />
-        </VerticalStackLayout>
-    </ScrollView>
+                <Label 
+                    Text="Gestión de Huertos Operacionales" 
+                    FontSize="14" 
+                    HorizontalOptions="Center" 
+                    TextColor="#757575" />
+            </VerticalStackLayout>
+
+            <!-- FORMULARIO -->
+            <VerticalStackLayout Grid.Row="2" Spacing="18" Margin="0,40,0,0">
+
+                <!-- CAMPO USUARIO -->
+                <Border StrokeShape="RoundRectangle 25"
+                        Stroke="Transparent"
+                        BackgroundColor="#F2F2F7"
+                        HeightRequest="55">
+                    <Entry 
+                        x:Name="idEntry" 
+                        Placeholder="Usuario" 
+                        Style="{StaticResource ModernEntryStyle}" 
+                        Keyboard="Email"/>
+                </Border>
+
+                <!-- CAMPO CONTRASEÑA -->
+                <Border StrokeShape="RoundRectangle 25"
+                        Stroke="Transparent"
+                        BackgroundColor="#F2F2F7"
+                        HeightRequest="55">
+                    <Entry 
+                        x:Name="passwordEntry" 
+                        Placeholder="Contraseña" 
+                        IsPassword="True" 
+                        Style="{StaticResource ModernEntryStyle}" />
+                </Border>
+
+                <!-- BOTÓN INGRESAR -->
+                <Button 
+                    Clicked="eventBtnLogin" 
+                    Text="Ingresar" 
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    BackgroundColor="#39b75f" 
+                    TextColor="White"
+                    HeightRequest="55"
+                    CornerRadius="27"
+                    Margin="0,10,0,0" />
+            </VerticalStackLayout>
+
+            <!-- FOOTER -->
+            <Grid Grid.Row="4" Margin="0,0,0,15">
+                <Image 
+                    Source="footer_logo.png" 
+                    HeightRequest="60" 
+                    WidthRequest="60"
+                    HorizontalOptions="Center" />
+
+                <Label 
+                    Text="V4.0" 
+                    FontSize="12"
+                    TextColor="#BDBDBD"
+                    FontAttributes="Bold"
+                    HorizontalOptions="End"
+                    VerticalOptions="End" />
+            </Grid>
+        </Grid>
+
+        <!-- POPUP MENÚ (Oculto por defecto) -->
+        <Grid x:Name="menuPopup"
+              BackgroundColor="#CC000000"
+              IsVisible="False"
+              InputTransparent="False">
+            
+            <!-- Tap para cerrar al tocar fuera -->
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnCerrarMenu" />
+            </Grid.GestureRecognizers>
+            
+            <Border StrokeShape="RoundRectangle 16"
+                    Stroke="Transparent"
+                    BackgroundColor="White"
+                    WidthRequest="320"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    Padding="0"
+                    InputTransparent="False"
+                    Shadow="{Shadow Brush=Black, Opacity=0.3, Radius=20, Offset='0,10'}">
+                
+                <!-- Evitar que el tap cierre el menú al tocar dentro -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Border.GestureRecognizers>
+                
+                <VerticalStackLayout Spacing="0">
+                    
+                    <!-- Encabezado del menú -->
+                    <Border StrokeShape="RoundRectangle 16,16,0,0"
+                            BackgroundColor="#39b75f" 
+                            Padding="20,18"
+                            Stroke="Transparent">
+                        <Label Text="Actualizar Datos"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="White" 
+                               HorizontalOptions="Center"/>
+                    </Border>
+
+                    <!-- Opciones del menú -->
+                    <Button Text="📥 Descargar Árboles"
+                            BackgroundColor="Transparent"
+                            TextColor="#212121"
+                            FontSize="16"
+                            HorizontalOptions="Fill"
+                            HeightRequest="60"
+                            Margin="0"
+                            Padding="20,0"
+                            Clicked="OnDescargarArboles" />
+                    
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="#E5E7EB" 
+                             Margin="20,0" />
+
+                    <Button Text="👥 Descargar Usuarios"
+                            BackgroundColor="Transparent"
+                            TextColor="#212121"
+                            FontSize="16"
+                            HorizontalOptions="Fill"
+                            HeightRequest="60"
+                            Margin="0"
+                            Padding="20,0"
+                            Clicked="OnDescargarUsuarios" />
+                    
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="#E5E7EB" 
+                             Margin="20,0" />
+
+                    <Button Text="🔄 Actualizar Todo"
+                            BackgroundColor="Transparent"
+                            TextColor="#39b75f"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Fill"
+                            HeightRequest="60"
+                            Margin="0"
+                            Padding="20,0"
+                            Clicked="UpdateData" />
+                    
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="#E5E7EB" 
+                             Margin="20,0" />
+
+                    <Button Text="✕ Cerrar"
+                            BackgroundColor="Transparent"
+                            TextColor="#757575"
+                            FontSize="15"
+                            HorizontalOptions="Fill"
+                            HeightRequest="54"
+                            Margin="0,0,0,4"
+                            Padding="20,0"
+                            Clicked="OnCerrarMenu" />
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentPage>

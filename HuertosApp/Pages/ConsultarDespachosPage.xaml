@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.ConsultarDespachosPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Consultar despachos">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Filtros -->
+                <Frame Padding="12" CornerRadius="16" HasShadow="True">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Consulta de despachos"
+                               FontSize="18"
+                               FontAttributes="Bold" />
+                        <Label Text="Filtra por rango de fechas o por folio."
+                               FontSize="12"
+                               TextColor="#6B7280" />
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <VerticalStackLayout>
+                                <Label Text="Desde" FontSize="12" />
+                                <DatePicker x:Name="FechaDesde" Format="dd/MM/yyyy" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="Hasta" FontSize="12" />
+                                <DatePicker x:Name="FechaHasta"  Format="dd/MM/yyyy" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <VerticalStackLayout>
+                            <Label Text="Folio (opcional)" FontSize="12" />
+                            <Entry x:Name="FolioEntry"
+                                   Placeholder="Ej: 103"
+                                   Keyboard="Numeric" />
+                        </VerticalStackLayout>
+
+                        <Button Text="Buscar despachos"
+                                BackgroundColor="#2563EB"
+                                TextColor="White"
+                                CornerRadius="24"
+                                Clicked="BtnBuscar_Clicked" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Totales -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                    <Frame Padding="8" CornerRadius="12">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Despachos" FontSize="11" TextColor="#6B7280" />
+                            <Label x:Name="LblTotalDespachos"
+                                   Text="0"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Padding="8" CornerRadius="12">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Árboles" FontSize="11" TextColor="#6B7280" />
+                            <Label x:Name="LblTotalArboles"
+                                   Text="0"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Padding="8" CornerRadius="12">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Kilos" FontSize="11" TextColor="#6B7280" />
+                            <Label x:Name="LblTotalKilos"
+                                   Text="0.0"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <Label x:Name="LblSinResultados"
+                       Text="No hay despachos para el filtro seleccionado."
+                       FontSize="13"
+                       TextColor="#6B7280"
+                       IsVisible="False"
+                       HorizontalOptions="Center" />
+
+                <!-- Lista de despachos -->
+                <CollectionView x:Name="DespachosCollection"
+                                IsVisible="False">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,4"
+                                   Padding="10"
+                                   CornerRadius="14"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="{Binding FolioMostrar, StringFormat=' {0}'}"
+                                               FontAttributes="Bold" />
+                                        <Label Text="{Binding fecha_desp, StringFormat='Fecha: {0}'}"
+                                               FontSize="12"
+                                               TextColor="#6B7280" />
+                                        <Label Text="{Binding total_arboles, StringFormat='Árboles: {0}'}"
+                                               FontSize="12" />
+                                        <Label Text="{Binding total_kilos, StringFormat='Kilos: {0:N1}'}"
+                                               FontSize="12" />
+                                    </VerticalStackLayout>
+
+                                    <Button Grid.Column="1"
+                                            Text="Excel"
+                                            Padding="10,4"
+                                            BackgroundColor="#10B981"
+                                            TextColor="White"
+                                            CornerRadius="20"
+                                            VerticalOptions="Center"
+                                            Clicked="BtnExcel_Clicked" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

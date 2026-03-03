@@ -18,9 +18,9 @@ namespace HuertosApp.Pages
         {
             await Navigation.PushAsync(new NuevoRegistroCosechaPage());
 
-            await DisplayAlert("Registro de Cosecha",
-                "Aquí iremos a la página para registrar la cosecha operacional (QR + formulario).",
-                "OK");
+            //await DisplayAlert("Registro de Cosecha",
+            //    "Aquí iremos a la página para registrar la cosecha operacional (QR + formulario).",
+            //    "OK");
         }
 
         // 2) Consultar datos
@@ -29,9 +29,15 @@ namespace HuertosApp.Pages
             // TODO: cuando tengas la pantalla:
             // await Navigation.PushAsync(new ConsultarCosechaOperacionalPage());
 
-            await DisplayAlert("Consultar Cosecha",
-                "Aquí se mostrará la lista de cosechas operacionales guardadas en SQLite.",
-                "OK");
+
+            
+        {
+            await Navigation.PushAsync(new ConsultarCosechaOperacionalPage());
+        }
+
+        //await DisplayAlert("Consultar Cosecha",
+        //        "Aquí se mostrará la lista de cosechas operacionales guardadas en SQLite.",
+        //        "OK");
         }
 
         // 3) Transmitir datos
@@ -41,21 +47,21 @@ namespace HuertosApp.Pages
             // - leer cosechas no enviadas de SQLite
             // - llamar a la API de cosecha operacional
             // - marcar como enviadas
-
-            await DisplayAlert("Transmitir Datos",
-                "Más adelante conectaremos esta opción con la API de cosecha operacional.",
-                "OK");
+            await Navigation.PushAsync(new TransmitirCosechaOperacionalPage());
+            //await DisplayAlert("Transmitir Datos",
+            //    "Más adelante conectaremos esta opción con la API de cosecha operacional.",
+            //    "OK");
         }
 
         // 4) Registro de Despacho
         private async void OnRegistroDespachoClicked(object sender, EventArgs e)
         {
             // Aquí luego:
-            // await Navigation.PushAsync(new RegistroDespachoPage());
+            await Navigation.PushAsync(new SubmenuDespachoPage());
 
-            await DisplayAlert("Registro de Despacho",
-                "Aquí podrás agrupar cosechas en un despacho (folio, fecha, documento).",
-                "OK");
+            //await DisplayAlert("Registro de Despacho",
+            //    "Aquí podrás agrupar cosechas en un despacho (folio, fecha, documento).",
+            //    "OK");
         }
 
         // 5) Salir

@@ -1,4 +1,5 @@
-ï»¿using HuertosApp.Models;
+using HuertosApp.Models;
+using HuertosApp.Models;
 using HuertosApp.Pages;
 using HuertosApp.Services;
 using SQLitePCL;
@@ -11,13 +12,30 @@ namespace HuertosApp
 
         public App()
         {
-            InitializeComponent(); // Inicializa los componentes de la aplicaciÃ³n
+            InitializeComponent(); // Inicializa los componentes de la aplicación
 
             Batteries_V2.Init();
 
             Database.InitializeDatabase(); // Inicializa la base de datos
 
-            MainPage = new NavigationPage(new LoginPage()); // Establece la pÃ¡gina principal de la aplicaciÃ³n como LoginPage envuelta en un NavigationPage
+            // Forzar tema claro (Light mode) siempre
+            UserAppTheme = AppTheme.Light;
+
+            MainPage = new NavigationPage(new LoginPage()); // Establece la página principal de la aplicación como LoginPage envuelta en un NavigationPage
+        }
+
+        protected override Window CreateWindow(IActivationState activationState)
+        {
+            var window = base.CreateWindow(activationState);
+
+            // Asegurar que el tema claro se mantenga
+            window.Created += (s, e) =>
+            {
+                UserAppTheme = AppTheme.Light;
+            };
+
+            return window;
         }
     }
 }
+

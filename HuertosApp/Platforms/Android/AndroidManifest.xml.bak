@@ -1,27 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"  android:versionCode="7" android:versionName="4.0"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.imf.huertosapp">
 
+    <!-- ===== PERMISOS ===== -->
+    <!-- Internet para consumir tus APIs PHP -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Cámara para escanear QR -->
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- SOLO si realmente lees/escribes archivos fuera del sandbox de la app -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- Llamar por teléfono (si sigues usando esta función en la app) -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
+    <!-- ===== FEATURES (recomendado para QR) ===== -->
+    <!-- Declarar que usas cámara; required=false por si corre en dispositivos sin cámara trasera -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-    <queries>
-        <intent>
-            <action android:name="android.media.action.IMAGE_CAPTURE" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:mimeType="*/*" />
-        </intent>
-    </queries>
-
+    <!-- ===== APPLICATION ===== -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/appicon"

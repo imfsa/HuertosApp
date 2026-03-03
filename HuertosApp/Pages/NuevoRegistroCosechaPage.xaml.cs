@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
 using HuertosApp.Models;
@@ -14,18 +14,21 @@ namespace HuertosApp.Pages
     public partial class NuevoRegistroCosechaPage : ContentPage
     {
         private readonly List<CosechadorModel> cosechadores;
+        private bool _isScanning = false;
+        private bool _hasShownHelp = false;
+        private bool _isFullScreen = false;
 
         public NuevoRegistroCosechaPage()
         {
             InitializeComponent();
 
-            // Fecha del día actual (solo lectura)
-            FechaEntry.Text = DateTime.Now.ToString("yyyy-MM-dd");
+            // Fecha del día actual
+            FechaEntry.Text = DateTime.Now.ToString("dd/MM/yyyy");
 
             // Estado de despacho por defecto
             EstadoDespachoEntry.Text = "NO";
 
-            // Inicializar lista de cosechadores
+            // Lista de cosechadores
             cosechadores = new List<CosechadorModel>
             {
                 new CosechadorModel { Nombre = "HS", IsSelected = false },
@@ -40,11 +43,21 @@ namespace HuertosApp.Pages
             collectionViewCosechadores.ItemsSource = cosechadores;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            // Configurar opciones del lector (solo QR)
+            // Mensaje inicial de ayuda (una vez por instancia)
+            if (!_hasShownHelp)
+            {
+                _hasShownHelp = true;
+                await DisplayAlert(
+                    "Registro de Cosecha",
+                    "Aquí podrás escanear el código QR del árbol y registrar los kilos cosechados.",
+                    "Entendido");
+            }
+
+            // Configurar lector QR
             if (cameraView != null)
             {
                 cameraView.Options = new BarcodeReaderOptions
@@ -54,21 +67,136 @@ namespace HuertosApp.Pages
                     Multiple = false
                 };
 
-                cameraView.IsDetecting = true;
+                cameraView.IsDetecting = false;
             }
+
+            _isScanning = false;
+            ScannerOverlay.IsVisible = false;
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            DetenerScanner();
+        }
 
-            if (cameraView != null)
+        // ==================== CONTROL DEL POPUP / SCANNER ====================
+
+        private void BtnMostrarScanner_Clicked(object sender, EventArgs e)
+        {
+            if (cameraView == null)
+                return;
+
+            // Iniciar en modo normal (no pantalla completa)
+            _isFullScreen = false;
+            ConfigurarTamañoScanner();
+
+            ScannerOverlay.IsVisible = true;
+            cameraView.IsDetecting = true;
+            _isScanning = true;
+        }
+
+        private void BtnCerrarScanner_Clicked(object sender, EventArgs e)
+        {
+            DetenerScanner();
+        }
+
+        private void BtnToggleTorch_Clicked(object sender, EventArgs e)
+        {
+            if (cameraView == null)
+                return;
+
+            cameraView.IsTorchOn = !cameraView.IsTorchOn;
+            
+            // Actualizar el texto del botón
+            if (btnTorch != null)
             {
-                cameraView.IsDetecting = false;
+                btnTorch.Text = cameraView.IsTorchOn ? "💡 ON" : "💡 OFF";
+                btnTorch.BackgroundColor = cameraView.IsTorchOn 
+                    ? Color.FromArgb("#FCD34D") 
+                    : Color.FromArgb("#374151");
             }
         }
 
-        // Evento que dispara ZXing cuando detecta un código
+        private void BtnToggleFullScreen_Clicked(object sender, EventArgs e)
+        {
+            _isFullScreen = !_isFullScreen;
+            ConfigurarTamañoScanner();
+            
+            // Actualizar ícono del botón
+            if (btnFullScreen != null)
+            {
+                btnFullScreen.Text = _isFullScreen ? "⛶" : "⛶";
+                btnFullScreen.BackgroundColor = _isFullScreen 
+                    ? Color.FromArgb("#2563EB") 
+                    : Color.FromArgb("#374151");
+            }
+        }
+
+        private void ConfigurarTamañoScanner()
+        {
+            if (ScannerContainer == null || cameraView == null)
+                return;
+
+            if (_isFullScreen)
+            {
+                // MODO PANTALLA COMPLETA
+                ScannerContainer.WidthRequest = -1;
+                ScannerContainer.HeightRequest = -1;
+                ScannerContainer.Margin = new Thickness(0);
+                ScannerContainer.HorizontalOptions = LayoutOptions.Fill;
+                ScannerContainer.VerticalOptions = LayoutOptions.Fill;
+                
+                cameraView.HeightRequest = -1;
+                cameraView.WidthRequest = -1;
+            }
+            else
+            {
+                // MODO POPUP RESPONSIVE
+                // Obtener el ancho de la pantalla
+                var screenWidth = DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density;
+                var screenHeight = DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density;
+                
+                // Calcular dimensiones con padding de 40px (20 a cada lado)
+                var popupWidth = Math.Min(screenWidth - 40, 500);  // Máximo 500px
+                var popupHeight = Math.Min(screenHeight * 0.7, 600); // Máximo 70% de la pantalla o 600px
+                
+                // Calcular tamaño de la cámara (90% del popup menos padding)
+                var cameraSize = Math.Min(popupWidth - 60, popupHeight - 150);
+                
+                ScannerContainer.WidthRequest = popupWidth;
+                ScannerContainer.HeightRequest = popupHeight;
+                ScannerContainer.Margin = new Thickness(20);
+                ScannerContainer.HorizontalOptions = LayoutOptions.Center;
+                ScannerContainer.VerticalOptions = LayoutOptions.Center;
+                
+                // Tamaño cuadrado para la cámara
+                cameraView.HeightRequest = cameraSize;
+                cameraView.WidthRequest = cameraSize;
+            }
+        }
+
+        private void DetenerScanner()
+        {
+            if (cameraView != null)
+            {
+                cameraView.IsDetecting = false;
+                cameraView.IsTorchOn = false;
+            }
+
+            _isScanning = false;
+            _isFullScreen = false;
+            ScannerOverlay.IsVisible = false;
+            
+            // Resetear botón de linterna
+            if (btnTorch != null)
+            {
+                btnTorch.Text = "💡 OFF";
+                btnTorch.BackgroundColor = Color.FromArgb("#374151");
+            }
+        }
+
+        // EVENTO DE ZXING AL DETECTAR CÓDIGO
         private void CameraView_BarcodesDetected(object sender, BarcodeDetectionEventArgs e)
         {
             var result = e.Results?.FirstOrDefault();
@@ -79,22 +207,19 @@ namespace HuertosApp.Pages
             if (string.IsNullOrWhiteSpace(value))
                 return;
 
-            // Ejecutar en el hilo de UI
             MainThread.BeginInvokeOnMainThread(async () =>
             {
-                // Pausamos detección para que no se dispare en bucle
-                if (cameraView != null)
-                    cameraView.IsDetecting = false;
-
+                // Detenemos el escaneo y ocultamos popup
+                DetenerScanner();
                 await ProcesarCodigoAsync(value);
             });
         }
 
         /// <summary>
         /// Procesa el texto leído del QR.
-        /// Admite:
+        /// Soporta:
         ///  - "15"
-        ///  - "HQT|1|000015"  → toma el último segmento como tree_id
+        ///  - "HQT|1|000015" → toma el último segmento como tree_id
         /// </summary>
         private async Task ProcesarCodigoAsync(string codigoLeido)
         {
@@ -107,15 +232,15 @@ namespace HuertosApp.Pages
                 }
 
                 string texto = codigoLeido.Trim();
-                long treeId;
+                long treeIdLong;
 
-                // Si viene en formato payload HQT|1|000001
+                // Formato payload HQT|1|000001
                 if (texto.Contains("|"))
                 {
                     var partes = texto.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                     var ultimo = partes.LastOrDefault();
 
-                    if (ultimo == null || !long.TryParse(ultimo, out treeId))
+                    if (ultimo == null || !long.TryParse(ultimo, out treeIdLong))
                     {
                         await DisplayAlert("QR no válido",
                             $"No se pudo extraer un ID de árbol desde: {texto}", "OK");
@@ -124,8 +249,7 @@ namespace HuertosApp.Pages
                 }
                 else
                 {
-                    // Formato simple: solo el ID
-                    if (!long.TryParse(texto, out treeId))
+                    if (!long.TryParse(texto, out treeIdLong))
                     {
                         await DisplayAlert("QR no válido",
                             $"El código leído no es un ID de árbol numérico: {texto}", "OK");
@@ -133,110 +257,320 @@ namespace HuertosApp.Pages
                     }
                 }
 
-                // Mostrar el ID en el campo (solo lectura)
-                TreeIdEntry.Text = treeId.ToString();
+                // Mostrar ID
+                TreeIdEntry.Text = treeIdLong.ToString();
 
-                // Buscar árbol en SQLite (GetArbolByIdAsync debe recibir long)
-                var arbol = await Database.GetArbolByIdAsync(treeId.ToString());
+                // Buscar árbol en SQLite (usa string como definimos en Database)
+                var arbol = await Database.GetArbolByIdAsync(treeIdLong.ToString());
                 if (arbol == null)
                 {
                     await DisplayAlert("No encontrado",
-                        $"No se encontró el árbol con ID {treeId} en la base local.", "OK");
+                        $"No se encontró el árbol con ID {treeIdLong} en la base local.", "OK");
                     return;
                 }
 
                 // Rellenar campos autocompletados
-                TemporadaEntry.Text = arbol.Temporada.ToString();
+                TemporadaEntry.Text = arbol.Temporada;
                 GenotipoEntry.Text = arbol.Genotipo;
                 EspecieEntry.Text = arbol.Especie;
-                ReplicaEntry.Text = arbol.Replica.ToString();
-                FilaEntry.Text = arbol.Fila.ToString();
-                ColumnaEntry.Text = arbol.Columna.ToString();
+                ReplicaEntry.Text = arbol.Replica;
+                FilaEntry.Text = arbol.Fila;
+                ColumnaEntry.Text = arbol.Columna;
                 PredioEntry.Text = arbol.Predio;
-                CodHuertoEntry.Text = arbol.CodHuerto.ToString();
+                CodHuertoEntry.Text = arbol.CodHuerto;
                 HuertoNombreEntry.Text = arbol.HuertoNombre;
 
                 await DisplayAlert("Código detectado",
-                    $"Árbol {treeId} cargado correctamente.", "OK");
+                    $"Árbol {treeIdLong} cargado correctamente.", "OK");
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error",
                     $"Ocurrió un error al procesar el código:\n{ex.Message}", "OK");
             }
-            finally
-            {
-                // Si quieres que siga leyendo después del mensaje:
-                if (cameraView != null)
-                    cameraView.IsDetecting = true;
-            }
         }
 
-        private void BtnReanudar_Clicked(object sender, EventArgs e)
-        {
-            if (cameraView != null)
-            {
-                cameraView.IsDetecting = true;
-            }
-        }
+        // ==================== REGISTRO EN SQLITE ====================
 
+        //private async void BtnRegistrar_Clicked(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        // Validaciones básicas
+        //        if (string.IsNullOrWhiteSpace(TreeIdEntry.Text))
+        //        {
+        //            await DisplayAlert("Falta escanear",
+        //                "Debe escanear un árbol antes de registrar la cosecha.", "OK");
+        //            return;
+        //        }
+
+        //        if (!decimal.TryParse(
+        //                KilosEntry.Text?.Replace(',', '.'),
+        //                System.Globalization.NumberStyles.Any,
+        //                System.Globalization.CultureInfo.InvariantCulture,
+        //                out decimal kilos))
+        //        {
+        //            await DisplayAlert("Kilos inválidos",
+        //                "Ingrese un valor numérico válido para los kilos.", "OK");
+        //            return;
+        //        }
+
+        //        if (kilos <= 0 || kilos > 100)
+        //        {
+        //            await DisplayAlert("Kilos fuera de rango",
+        //                "Los kilos deben estar entre 1 y 100.", "OK");
+        //            return;
+        //        }
+
+        //        var seleccionados = cosechadores
+        //            .Where(c => c.IsSelected)
+        //            .Select(c => c.Nombre)
+        //            .ToList();
+
+        //        if (!seleccionados.Any())
+        //        {
+        //            await DisplayAlert("Sin cosechadores",
+        //                "Debe seleccionar al menos un cosechador.", "OK");
+        //            return;
+        //        }
+
+        //        // Construir RegistroCosecha EXACTO a tu modelo
+        //        var registro = new RegistroCosecha
+        //        {
+        //            TreeId = long.Parse(TreeIdEntry.Text),
+        //            FechaCosecha = FechaEntry.Text ?? DateTime.Now.ToString("yyyy-MM-dd"),
+
+        //            Temporada = int.Parse(TemporadaEntry.Text),
+        //            Genotipo = GenotipoEntry.Text ?? "",
+        //            Especie = EspecieEntry.Text ?? "",
+        //            Replica = int.Parse(ReplicaEntry.Text),
+        //            Fila = int.Parse(FilaEntry.Text),
+        //            Columna = int.Parse(ColumnaEntry.Text),
+        //            Predio = PredioEntry.Text ?? "",
+        //            CodHuerto = int.Parse(CodHuertoEntry.Text),
+        //            HuertoNombre = HuertoNombreEntry.Text ?? "",
+
+        //            Kilos = kilos,
+        //            Cosechador = string.Join(", ", seleccionados),
+
+        //            Despachado = false,
+        //            DespachoId = null,
+        //            CreatedAt = DateTime.Now
+        //        };
+
+        //        await Database.InsertRegistroCosechaAsync(registro);
+
+        //        var accion = await DisplayActionSheet(
+        //            "Registro guardado correctamente",
+        //            "Cancelar",
+        //            null,
+        //            "Nuevo registro",
+        //            "Volver al menú");
+
+        //        if (accion == "Nuevo registro")
+        //        {
+        //            LimpiarFormulario();
+        //        }
+        //        else if (accion == "Volver al menú")
+        //        {
+        //            await Navigation.PopAsync();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await DisplayAlert("Error",
+        //            $"No se pudo guardar el registro:\n{ex.Message}", "OK");
+        //    }
+        //}
+
+
+
+        // BOTÓN REGISTRAR: guarda en SQLite con tu modelo RegistroCosecha
         private async void BtnRegistrar_Clicked(object sender, EventArgs e)
         {
-            // Validación básica
-            if (string.IsNullOrWhiteSpace(TreeIdEntry.Text))
+            try
             {
-                await DisplayAlert("Falta escanear",
-                    "Debe escanear un árbol antes de registrar la cosecha.", "OK");
-                return;
-            }
+                // Validaciones básicas
+                if (string.IsNullOrWhiteSpace(TreeIdEntry.Text))
+                {
+                    await DisplayAlert("Falta escanear",
+                        "Debe escanear un árbol antes de registrar la cosecha.", "OK");
+                    return;
+                }
 
-            if (string.IsNullOrWhiteSpace(KilosEntry.Text) ||
-                !double.TryParse(KilosEntry.Text.Replace(',', '.'),
-                                 System.Globalization.NumberStyles.Any,
-                                 System.Globalization.CultureInfo.InvariantCulture,
-                                 out double kilos))
+                if (!decimal.TryParse(
+                        KilosEntry.Text?.Replace(',', '.'),
+                        System.Globalization.NumberStyles.Any,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out decimal kilos))
+                {
+                    await DisplayAlert("Kilos inválidos",
+                        "Ingrese un valor numérico válido para los kilos.", "OK");
+                    return;
+                }
+
+                if (kilos <= 0 || kilos > 100)
+                {
+                    await DisplayAlert("Kilos fuera de rango",
+                        "Los kilos deben estar entre 1 y 100.", "OK");
+                    return;
+                }
+
+                var seleccionados = cosechadores
+                    .Where(c => c.IsSelected)
+                    .Select(c => c.Nombre)
+                    .ToList();
+
+                if (!seleccionados.Any())
+                {
+                    await DisplayAlert("Sin cosechadores",
+                        "Debe seleccionar al menos un cosechador.", "OK");
+                    return;
+                }
+
+                // ================== NUEVO VALIDADOR DE DUPLICADO ==================
+                // Fecha interna SIEMPRE en formato ISO, independiente de lo que se muestre
+                var fechaCosecha = DateTime.Today.ToString("yyyy-MM-dd");
+                long treeId = long.Parse(TreeIdEntry.Text);
+
+                // Traemos todos los registros de cosecha de hoy
+                var registrosHoy = await Database.GetRegistrosCosechaByFechaAsync(fechaCosecha);
+
+                // ¿Existe ya un registro para el mismo árbol hoy?
+                bool yaExisteMismoArbolHoy = registrosHoy.Any(r => r.TreeId == treeId);
+
+                if (yaExisteMismoArbolHoy)
+                {
+                    bool continuar = await DisplayAlert(
+                        "Aviso",
+                        "Este árbol ya tiene un registro de cosecha para el día de hoy.\n\n" +
+                        "¿Deseas registrar de todos modos?",
+                        "Sí, registrar",
+                        "No, cancelar");
+
+                    if (!continuar)
+                    {
+                        // El usuario decidió no registrar
+                        return;
+                    }
+                }
+                // ================================================================
+
+                // Construir RegistroCosecha (modelo EXACTO que enviaste)
+                //var registro = new RegistroCosecha
+                //{
+                //    TreeId = treeId,
+                //    FechaCosecha = fechaCosecha,
+
+                //    Temporada = int.Parse(TemporadaEntry.Text),
+                //    Genotipo = GenotipoEntry.Text ?? "",
+                //    Especie = EspecieEntry.Text ?? "",
+                //    Replica = int.Parse(ReplicaEntry.Text),
+                //    Fila = int.Parse(FilaEntry.Text),
+                //    Columna = int.Parse(ColumnaEntry.Text),
+                //    Predio = PredioEntry.Text ?? "",
+                //    CodHuerto = int.Parse(CodHuertoEntry.Text),
+                //    HuertoNombre = HuertoNombreEntry.Text ?? "",
+
+                //    Kilos = kilos,
+                //    Cosechador = string.Join(", ", seleccionados),
+
+                //    Despachado = false,
+                //    DespachoId = null,
+                //    CreatedAt = DateTime.Now
+
+
+                //};
+                // Obtén el usuario actual desde donde lo guardes tú (Preferences, singleton, etc.)
+                var nombreUsuario = Preferences.Get("NombreUsuario", "sin_usuario"); // ejemplo
+
+
+                // Construir RegistroCosecha (modelo EXACTO que enviaste)
+                var registro = new RegistroCosecha
+                {
+                    TreeId = treeId,
+                    FechaCosecha = fechaCosecha,
+
+                    Temporada = int.Parse(TemporadaEntry.Text),
+                    Genotipo = GenotipoEntry.Text ?? "",
+                    Especie = EspecieEntry.Text ?? "",
+                    Replica = int.Parse(ReplicaEntry.Text),
+                    Fila = int.Parse(FilaEntry.Text),
+                    Columna = int.Parse(ColumnaEntry.Text),
+                    Predio = PredioEntry.Text ?? "",
+                    CodHuerto = int.Parse(CodHuertoEntry.Text),
+                    HuertoNombre = HuertoNombreEntry.Text ?? "",
+
+                    Kilos = kilos,
+                    Cosechador = string.Join(", ", seleccionados),
+
+                    Despachado = false,
+                    DespachoId = null,
+                    CreatedAt = DateTime.Now,
+
+                    // TODO: aquí cuando tengas el usuario logueado real, lo reemplazas
+                    UsuarioId = App.CurrentUser.Id, // Usuario actual
+                    Sincronizado = false
+                };
+
+
+                // Guardar en SQLite
+                await Database.InsertRegistroCosechaAsync(registro);
+
+                // Flujo post-registro
+                var accion = await DisplayActionSheet(
+                    "Registro guardado correctamente",
+                    "Cancelar",
+                    null,
+                    "Nuevo registro",
+                    "Volver al menú");
+
+                if (accion == "Nuevo registro")
+                {
+                    LimpiarFormulario();
+                }
+                else if (accion == "Volver al menú")
+                {
+                    await Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
             {
-                await DisplayAlert("Kilos inválidos",
-                    "Ingrese un valor numérico válido para los kilos.", "OK");
-                return;
+                await DisplayAlert("Error",
+                    $"No se pudo guardar el registro:\n{ex.Message}", "OK");
             }
-
-            if (kilos <= 0 || kilos > 100)
-            {
-                await DisplayAlert("Kilos fuera de rango",
-                    "Los kilos deben estar entre 0 y 100.", "OK");
-                return;
-            }
-
-            var seleccionados = cosechadores
-                .Where(c => c.IsSelected)
-                .Select(c => c.Nombre)
-                .ToList();
-
-            if (!seleccionados.Any())
-            {
-                await DisplayAlert("Sin cosechadores",
-                    "Debe seleccionar al menos un cosechador.", "OK");
-                return;
-            }
-
-            // Solo mostramos resumen por ahora (después guardamos en SQLite)
-            var mensaje =
-                $"Árbol: {TreeIdEntry.Text}\n" +
-                $"Fecha: {FechaEntry.Text}\n" +
-                $"Kilos: {kilos}\n" +
-                $"Cosechadores: {string.Join(", ", seleccionados)}\n" +
-                $"Despachado: {EstadoDespachoEntry.Text}";
-
-            await DisplayAlert("Registro de cosecha", mensaje, "OK");
-
-            // TODO: cuando definamos el modelo RegistroCosechaLocal,
-            // aquí haremos el Insert en SQLite.
         }
 
         private async void BtnVolver_Clicked(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
+        }
+
+        private void LimpiarFormulario()
+        {
+            TreeIdEntry.Text = "";
+            TemporadaEntry.Text = "";
+            GenotipoEntry.Text = "";
+            EspecieEntry.Text = "";
+            ReplicaEntry.Text = "";
+            FilaEntry.Text = "";
+            ColumnaEntry.Text = "";
+            PredioEntry.Text = "";
+            CodHuertoEntry.Text = "";
+            HuertoNombreEntry.Text = "";
+            KilosEntry.Text = "";
+
+            foreach (var c in cosechadores)
+                c.IsSelected = false;
+
+            collectionViewCosechadores.ItemsSource = null;
+            collectionViewCosechadores.ItemsSource = cosechadores;
+
+            FechaEntry.Text = DateTime.Now.ToString("dd/MM/yyyy");  // solo visual
+            EstadoDespachoEntry.Text = "NO";
+
+            // Scanner apagado y oculto, el usuario decide si vuelve a escanear
+            DetenerScanner();
         }
     }
 }

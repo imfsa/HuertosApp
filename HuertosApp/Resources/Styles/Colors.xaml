@@ -6,19 +6,22 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <!-- Colores primarios - Verde Corporativo HuertosApp -->
+    <Color x:Key="Primary">#39b75f</Color>
+    <Color x:Key="PrimaryDark">#2d9249</Color>
+    <Color x:Key="PrimaryDarkText">#FFFFFF</Color>
+    <Color x:Key="Secondary">#C8E6C9</Color>
+    <Color x:Key="SecondaryDarkText">#1B5E20</Color>
+    <Color x:Key="Tertiary">#1B5E20</Color>
 
+    <!-- Colores base -->
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
     <Color x:Key="OffBlack">#1f1f1f</Color>
 
+    <!-- Paleta de grises -->
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
     <Color x:Key="Gray300">#ACACAC</Color>
@@ -28,6 +31,14 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <!-- Verde HuertosApp adicionales -->
+    <Color x:Key="GreenLight">#C8E6C9</Color>
+    <Color x:Key="GreenMedium">#81C784</Color>
+    <Color x:Key="GreenPrimary">#39b75f</Color>
+    <Color x:Key="GreenDark">#1B5E20</Color>
+    <Color x:Key="GreenLeaf">#66BB6A</Color>
+
+    <!-- Brushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>

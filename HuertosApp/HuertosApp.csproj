@@ -38,6 +38,46 @@
 		<!-- Tizen (si en futuro se activa) -->
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	  <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+	  <RunAOTCompilation>false</RunAOTCompilation>
+	  <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+	  <AndroidLinkMode>None</AndroidLinkMode>
+	  <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
+	  <AndroidDexTool>d8</AndroidDexTool>
+	  <AndroidEnableDesugar>true</AndroidEnableDesugar>
+	  <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationDisplayVersion>2.3</ApplicationDisplayVersion>
+	  <ApplicationVersion>4</ApplicationVersion>
+	  <ApplicationId>com.companyname.huertosapp2</ApplicationId>
+	</PropertyGroup>
 
 
 	<!-- ============================
@@ -109,6 +149,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="Pages\ConsultarCosechaOperacionalPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\ConsultarDespachosPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Pages\ConsultarRegistroComercialPage.xaml" Generator="MSBuild:Compile" />
 		<MauiXaml Update="Pages\ConsultarFertirriegoPage.xaml" Generator="MSBuild:Compile" />
 		<MauiXaml Update="Pages\DescargaDatosPage.xaml" Generator="MSBuild:Compile" />
@@ -117,6 +163,9 @@
 		<MauiXaml Update="Pages\EditarRegistroFertirriegoPage.xaml" Generator="MSBuild:Compile" />
 		<MauiXaml Update="Pages\LoginPage.xaml" Generator="MSBuild:Compile" />
 		<MauiXaml Update="Pages\MenuPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\NuevoDespachoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Pages\NuevoRegistroComercialPage.xaml" Generator="MSBuild:Compile" />
 		<MauiXaml Update="Pages\NuevoRegistroCosechaPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
@@ -126,7 +175,13 @@
 		<MauiXaml Update="Pages\SubmenuCosechaOperacional.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Pages\SubmenuDespachoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Pages\SubmenuFertirriegoPage.xaml" Generator="MSBuild:Compile" />
+		<MauiXaml Update="Pages\TransmitirCosechaOperacionalPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 </Project>

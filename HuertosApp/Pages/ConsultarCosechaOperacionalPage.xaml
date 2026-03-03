@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="HuertosApp.Pages.ConsultarCosechaOperacionalPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Consulta Cosecha Operacional"
+    BackgroundColor="#F2F2F5">
+
+    <ContentPage.Content>
+        <Grid Padding="16" RowDefinitions="Auto,Auto,*,Auto">
+
+            <!-- TARJETA PRINCIPAL: CONSULTA DE DATOS -->
+            <Frame
+                Grid.Row="0"
+                CornerRadius="16"
+                BackgroundColor="White"
+                HasShadow="True"
+                Padding="16">
+                <VerticalStackLayout Spacing="8">
+
+                    <Label
+                        Text="Consulta de datos de cosecha"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#333333" />
+
+                    <Label
+                        Text="Selecciona una fecha para revisar los árboles cosechados antes de despachar."
+                        FontSize="13"
+                        TextColor="#666666" />
+
+                    <!-- Fila de fecha + botón Buscar -->
+                    <Grid
+                        Margin="0,8,0,0"
+                        ColumnDefinitions="Auto,*,Auto"
+                        ColumnSpacing="8"
+                        VerticalOptions="Center">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Fecha:"
+                            VerticalOptions="Center"
+                            FontAttributes="Bold"
+                            TextColor="#333333" />
+
+                        <DatePicker
+                            Grid.Column="1"
+                            x:Name="FechaPicker"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center" 
+                            Format="dd/MM/yyyy" 
+                            />
+
+                        <Button
+                            Grid.Column="2"
+                            Text="Buscar"
+                            Clicked="BtnBuscar_Clicked"
+                            BackgroundColor="#1976D2"
+                            TextColor="White"
+                            CornerRadius="20"
+                            Padding="18,8"
+                            FontAttributes="Bold" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- TARJETAS DE TOTALES -->
+            <HorizontalStackLayout
+                Grid.Row="1"
+                Margin="0,12,0,8"
+                Spacing="12">
+
+                <!-- Total Árboles -->
+                <Frame
+                    HasShadow="True"
+                    CornerRadius="14"
+                    Padding="12"
+                    BackgroundColor="White"
+                    HorizontalOptions="FillAndExpand">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <!-- Icono -->
+                        <Label
+                            Grid.Column="0"
+                            Text="🌳"
+                            FontSize="22"
+                            VerticalOptions="Center" />
+                        <!-- Texto -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label
+                                Text="Árboles registrados"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                TextColor="#555555" />
+                            <Label
+                                x:Name="LblTotalArboles"
+                                Text="0"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="#333333" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+
+                <!-- Total Kilos -->
+                <Frame
+                    HasShadow="True"
+                    CornerRadius="14"
+                    Padding="12"
+                    BackgroundColor="White"
+                    HorizontalOptions="FillAndExpand">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                        <!-- Icono -->
+                        <Label
+                            Grid.Column="0"
+                            Text="⚖️"
+                            FontSize="22"
+                            VerticalOptions="Center" />
+                        <!-- Texto -->
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label
+                                Text="Kilos cosechados"
+                                FontSize="13"
+                                FontAttributes="Bold"
+                                TextColor="#555555" />
+                            <Label
+                                x:Name="LblTotalKilos"
+                                Text="0,0"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="#333333" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Frame>
+            </HorizontalStackLayout>
+
+            <!-- MENSAJE SIN REGISTROS -->
+            <Label
+                x:Name="LblSinRegistros"
+                Grid.Row="2"
+                Text="No hay registros de cosecha para esta fecha."
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontAttributes="Italic"
+                FontSize="14"
+                TextColor="#777777"
+                IsVisible="False" />
+
+            <!-- LISTA DE REGISTROS -->
+            <CollectionView
+                x:Name="CosechaCollectionView"
+                Grid.Row="2"
+                IsVisible="False">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Margin="0,6"
+                            Padding="12"
+                            HasShadow="True"
+                            CornerRadius="14"
+                            BackgroundColor="White"
+                            BorderColor="#DDDDDD">
+                            <VerticalStackLayout Spacing="4">
+
+                                <!-- Fila principal: Árbol + Kilos a la derecha -->
+                                <HorizontalStackLayout
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    Spacing="8">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding TreeId, StringFormat='Árbol #{0}'}"
+                                        TextColor="#333333"
+                                        HorizontalOptions="StartAndExpand" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="15"
+                                        Text="{Binding Kilos, StringFormat='{0:F1} kg'}"
+                                        TextColor="#1976D2"
+                                        HorizontalOptions="End" />
+                                </HorizontalStackLayout>
+
+                                <!-- Detalles -->
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding Genotipo, StringFormat='Genotipo: {0}'}"
+                                    TextColor="#555555" />
+
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding Predio, StringFormat='Predio: {0}'}"
+                                    TextColor="#555555" />
+
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding HuertoNombre, StringFormat='Huerto: {0}'}"
+                                    TextColor="#555555" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- BOTÓN REFRESCAR (OPCIONAL ABAJO) -->
+            <Button
+                Grid.Row="3"
+                Text="Refrescar"
+                Margin="0,8,0,0"
+                Clicked="BtnBuscar_Clicked"
+                BackgroundColor="#E0E0E0"
+                TextColor="#333333"
+                CornerRadius="20" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

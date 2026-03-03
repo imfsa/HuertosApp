@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using System.Globalization;
+using SQLite;
 using HuertosApp.Models;
 using System;
 using System.IO;
@@ -15,7 +16,8 @@ namespace HuertosApp.Services
         private static SQLiteAsyncConnection? _database;
         private static string _databasePath = string.Empty;
 
-        // Inicialización de la base de datos
+        // *************** INICIALIZACIÓN BASE DE DATOS ********************
+
         public static async Task InitializeDatabase()
         {
             try
@@ -48,6 +50,9 @@ namespace HuertosApp.Services
                 await _database.CreateTableAsync<RegistroComercial>();
                 await _database.CreateTableAsync<ArbolOperacional>();
                 await _database.CreateTableAsync<RegistroCosecha>();
+
+                // 🔹 Migración silenciosa de esquema (no borra datos)
+                await EnsureSchemaAsync();
 
                 Console.WriteLine("Base de datos inicializada correctamente.");
 
@@ -108,21 +113,105 @@ namespace HuertosApp.Services
             return _database;
         }
 
+        // *************** UTILIDADES DE ESQUEMA / MIGRACIÓN ***************
+
+        // Clase auxiliar para leer PRAGMA table_info
+        private class TableInfoRaw
+        {
+            public int cid { get; set; }
+            public string name { get; set; } = string.Empty;
+            public string type { get; set; } = string.Empty;
+            public int notnull { get; set; }
+            public string? dflt_value { get; set; }
+            public int pk { get; set; }
+        }
+
+        public class TableColumnInfo
+        {
+            public string Name { get; set; } = string.Empty;
+            public string Type { get; set; } = string.Empty;
+            public bool NotNull { get; set; }
+            public string DefaultValue { get; set; } = string.Empty;
+            public bool IsPrimaryKey { get; set; }
+        }
+
+        /// <summary>
+        /// Devuelve la definición de columnas de una tabla usando PRAGMA table_info.
+        /// </summary>
+        private static async Task<List<TableColumnInfo>> GetTableInfoAsync(string tableName)
+        {
+            if (_database == null)
+                throw new InvalidOperationException("Base de datos no inicializada.");
+
+            var result = await _database.QueryAsync<TableInfoRaw>($"PRAGMA table_info('{tableName}');");
+
+            return result.Select(r => new TableColumnInfo
+            {
+                Name = r.name,
+                Type = r.type,
+                NotNull = r.notnull == 1,
+                DefaultValue = r.dflt_value ?? string.Empty,
+                IsPrimaryKey = r.pk == 1
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Indica si una tabla tiene una columna específica.
+        /// </summary>
+        private static async Task<bool> HasColumnAsync(string tableName, string columnName)
+        {
+            var info = await GetTableInfoAsync(tableName);
+            return info.Any(c => c.Name.Equals(columnName, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Asegura que exista una columna en una tabla; si no existe, la agrega con ALTER TABLE.
+        /// No borra datos.
+        /// </summary>
+        private static async Task EnsureColumnAsync(
+            string tableName,
+            string columnName,
+            string sqlType,
+            string defaultValueExpression = "NULL")
+        {
+            if (_database == null)
+                throw new InvalidOperationException("Base de datos no inicializada.");
+
+            if (await HasColumnAsync(tableName, columnName))
+                return;
+
+            string sql = $"ALTER TABLE {tableName} " +
+                         $"ADD COLUMN {columnName} {sqlType} " +
+                         $"DEFAULT {defaultValueExpression};";
+
+            await _database.ExecuteAsync(sql);
+        }
+
+        /// <summary>
+        /// Migración silenciosa: corrige esquema sin borrar nada.
+        /// </summary>
+        private static async Task EnsureSchemaAsync()
+        {
+            if (_database == null)
+                throw new InvalidOperationException("Base de datos no inicializada.");
+
+            // 🔹 Asegurar columnas nuevas de RegistroCosecha
+            await EnsureColumnAsync("RegistroCosecha", "UsuarioId", "INTEGER", "NULL");
+            await EnsureColumnAsync("RegistroCosecha", "Sincronizado", "INTEGER", "0");
+        }
+
         // *************** CRUD Fertirriego ********************
 
-        // Crear Fertirriego
         public static async Task<int> InsertFertirriegoAsync(Fertirriego registro)
         {
             return await _database!.InsertAsync(registro);
         }
 
-        // Leer todos los registros de Fertirriego
         public static async Task<List<Fertirriego>> GetAllFertirriegoAsync()
         {
             return await _database!.Table<Fertirriego>().ToListAsync();
         }
 
-        // Leer registros de Fertirriego por fecha
         public static async Task<List<Fertirriego>> GetFertirriegoByFechaAsync(string fecha)
         {
             return await _database!.Table<Fertirriego>()
@@ -130,13 +219,11 @@ namespace HuertosApp.Services
                                    .ToListAsync();
         }
 
-        // Actualizar Fertirriego
         public static async Task<int> UpdateFertirriegoAsync(Fertirriego registro)
         {
             return await _database!.UpdateAsync(registro);
         }
 
-        // Eliminar Fertirriego
         public static async Task<int> DeleteFertirriegoAsync(Fertirriego registro)
         {
             return await _database!.DeleteAsync(registro);
@@ -144,19 +231,16 @@ namespace HuertosApp.Services
 
         // *************** CRUD RegistroComercial ********************
 
-        // Crear Registro Comercial
         public static async Task<int> InsertRegistroComercialAsync(RegistroComercial registro)
         {
             return await _database!.InsertAsync(registro);
         }
 
-        // Leer todos los registros comerciales
         public static async Task<List<RegistroComercial>> GetAllRegistroComercialAsync()
         {
             return await _database!.Table<RegistroComercial>().ToListAsync();
         }
 
-        // Leer registros comerciales por fecha
         public static async Task<List<RegistroComercial>> GetRegistroComercialByFechaAsync(string fecha)
         {
             return await _database!.Table<RegistroComercial>()
@@ -164,13 +248,11 @@ namespace HuertosApp.Services
                                    .ToListAsync();
         }
 
-        // Actualizar Registro Comercial
         public static async Task<int> UpdateRegistroComercialAsync(RegistroComercial registro)
         {
             return await _database!.UpdateAsync(registro);
         }
 
-        // Eliminar Registro Comercial
         public static async Task<int> DeleteRegistroComercialAsync(RegistroComercial registro)
         {
             return await _database!.DeleteAsync(registro);
@@ -178,32 +260,27 @@ namespace HuertosApp.Services
 
         // *************** Funciones Adicionales ********************
 
-        // Limpiar registros antiguos de Fertirriego
         public static async Task ClearOldRegistrosAsync()
         {
             var threeDaysAgo = DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd");
             await _database!.ExecuteAsync("DELETE FROM Fertirriego WHERE FechaRiego < ?", threeDaysAgo);
         }
 
-        // Obtener fotos no enviadas
         public static Task<List<Foto>> GetFotosNoEnviadasAsync()
         {
             return _database!.Table<Foto>().Where(f => !f.Enviado).ToListAsync();
         }
 
-        // Actualizar estado de una foto
         public static Task<int> UpdatePhotoAsync(Foto foto)
         {
             return _database!.UpdateAsync(foto);
         }
 
-        // Insertar nueva foto
         public static Task<int> InsertPhotoAsync(Foto foto)
         {
             return _database!.InsertAsync(foto);
         }
 
-        // Actualizar base de datos desde un JSON (usuarios)
         public static async Task UpdateDatabaseFromJsonAsync(string urlUsuarios)
         {
             using var httpClient = new HttpClient();
@@ -228,20 +305,17 @@ namespace HuertosApp.Services
 
         // *************** ARBOLES OPERACIONALES ************************
 
-        // Inserta lista completa, reemplazando todo lo anterior
         public static async Task InsertArbolesOperacionalesAsync(List<ArbolOperacional> lista)
         {
             await _database!.DeleteAllAsync<ArbolOperacional>();
             await _database.InsertAllAsync(lista);
         }
 
-        // Obtener todos los árboles operacionales
         public static async Task<List<ArbolOperacional>> GetArbolesAsync()
         {
             return await _database!.Table<ArbolOperacional>().ToListAsync();
         }
 
-        // Buscar un árbol por TreeId (para escaneo QR)
         public static async Task<ArbolOperacional?> GetArbolByIdAsync(string treeId)
         {
             if (_database == null)
@@ -252,8 +326,6 @@ namespace HuertosApp.Services
                                   .FirstOrDefaultAsync();
         }
 
-
-        // Descargar árboles operacionales desde API y guardarlos en SQLite
         public static async Task<bool> DescargarArbolesOperacionalesAsync(string url)
         {
             try
@@ -269,11 +341,10 @@ namespace HuertosApp.Services
                 if (root == null || root.data == null)
                     return false;
 
-                // JSON → modelo ArbolOperacional (todo como string)
                 var lista = root.data.Select(x => new ArbolOperacional
                 {
-                    TreeId = x.tree_id,       // string
-                    Temporada = x.temporada,     // string
+                    TreeId = x.tree_id,
+                    Temporada = x.temporada,
                     Genotipo = x.genotipo,
                     Especie = x.especie,
                     Replica = x.replica,
@@ -296,9 +367,9 @@ namespace HuertosApp.Services
             }
         }
 
-
         // *************** REGISTRO DE COSECHA (LOCAL) ********************
 
+        // Insertar un registro de cosecha
         public static Task<int> InsertRegistroCosechaAsync(RegistroCosecha registro)
         {
             if (_database == null)
@@ -307,16 +378,124 @@ namespace HuertosApp.Services
             return _database.InsertAsync(registro);
         }
 
-        public static Task<List<RegistroCosecha>> GetRegistrosCosechaByFechaAsync(string fecha)
+        // Actualizar un registro de cosecha
+        public static Task<int> UpdateRegistroCosechaAsync(RegistroCosecha registro)
         {
             if (_database == null)
                 throw new InvalidOperationException("Base de datos no inicializada.");
 
-            return _database.Table<RegistroCosecha>()
-                            .Where(r => r.FechaCosecha == fecha)
-                            .ToListAsync();
+            return _database.UpdateAsync(registro);
         }
 
+        // 🔹 Registros de cosecha por fecha (blindado: nunca bota la app)
+        //public static async Task<List<RegistroCosecha>> GetRegistrosCosechaByFechaAsync(string fecha)
+        //{
+        //    if (_database == null)
+        //        throw new InvalidOperationException("Base de datos no inicializada.");
+
+        //    try
+        //    {
+        //        return await _database.Table<RegistroCosecha>()
+        //                              .Where(r => r.FechaCosecha == fecha)
+        //                              .ToListAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(
+        //            $"Error al obtener registros de cosecha para fecha {fecha}: {ex.Message}");
+
+        //        // Si algo sale mal (tabla rota, columna faltante, etc.), devolvemos lista vacía
+        //        // para que la pantalla no se caiga.
+        //        return new List<RegistroCosecha>();
+        //    }
+        //}
+
+        // 🔹 Registros de cosecha por fecha (blindado: nunca bota la app)
+        // 🔹 Registros de cosecha por fecha (blindado: nunca bota la app)
+        //public static async Task<List<RegistroCosecha>> GetRegistrosCosechaByFechaAsync(string fechaIso)
+        //{
+        //    if (_database == null)
+        //        throw new InvalidOperationException("Base de datos no inicializada.");
+
+        //    try
+        //    {
+        //        // fechaIso viene como "yyyy-MM-dd" desde la página
+        //        var targetDate = DateTime.ParseExact(fechaIso, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+        //        // 1) Traemos TODOS los registros
+        //        var todos = await _database.Table<RegistroCosecha>().ToListAsync();
+
+        //        if (todos == null || todos.Count == 0)
+        //            return new List<RegistroCosecha>();
+
+        //        // 2) Intentamos interpretar FechaCosecha en varios formatos
+        //        var formatos = new[]
+        //        {
+        //    "yyyy-MM-dd",
+        //    "yyyy-MM-dd HH:mm",
+        //    "yyyy-MM-dd HH:mm:ss",
+        //    "dd/MM/yyyy",
+        //    "dd/MM/yyyy HH:mm",
+        //    "dd/MM/yyyy HH:mm:ss"
+        //};
+
+        //        var result = new List<RegistroCosecha>();
+
+        //        foreach (var r in todos)
+        //        {
+        //            if (string.IsNullOrWhiteSpace(r.FechaCosecha))
+        //                continue;
+
+        //            if (!DateTime.TryParseExact(
+        //                    r.FechaCosecha.Trim(),
+        //                    formatos,
+        //                    CultureInfo.InvariantCulture,
+        //                    DateTimeStyles.None,
+        //                    out var fechaReg))
+        //            {
+        //                // Si no se puede parsear, lo saltamos silenciosamente
+        //                continue;
+        //            }
+
+        //            if (fechaReg.Date == targetDate.Date)
+        //                result.Add(r);
+        //        }
+
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine(
+        //            $"Error al obtener registros de cosecha para fecha {fechaIso}: {ex.Message}");
+
+        //        // Si algo sale mal, devolvemos lista vacía para que la pantalla no se caiga.
+        //        return new List<RegistroCosecha>();
+        //    }
+        //}
+        public static async Task<List<RegistroCosecha>> GetRegistrosCosechaByFechaAsync(string fechaIso)
+        {
+            if (_database == null)
+                throw new InvalidOperationException("Base de datos no inicializada.");
+
+            try
+            {
+                // fechaIso viene como "yyyy-MM-dd"
+                return await _database.Table<RegistroCosecha>()
+                                      .Where(r => r.FechaCosecha == fechaIso)
+                                      .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"Error al obtener registros de cosecha para fecha {fechaIso}: {ex.Message}");
+
+                return new List<RegistroCosecha>();
+            }
+        }
+
+
+
+        // Registros pendientes de despacho
         public static Task<List<RegistroCosecha>> GetRegistrosCosechaPendientesDespachoAsync()
         {
             if (_database == null)
@@ -327,12 +506,19 @@ namespace HuertosApp.Services
                             .ToListAsync();
         }
 
+        // Registros pendientes de sincronizar
+        public static Task<List<RegistroCosecha>> GetRegistrosCosechaPendientesSincronizarAsync()
+        {
+            if (_database == null)
+                throw new InvalidOperationException("Base de datos no inicializada.");
 
+            return _database.Table<RegistroCosecha>()
+                            .Where(r => !r.Sincronizado)
+                            .ToListAsync();
+        }
 
+        // *************** JSON AUX ***************
 
-
-
-        // Clase auxiliar para deserialización de JSON de usuarios
         public class RootObject
         {
             public List<Usuario> usuarios { get; set; } = new List<Usuario>();

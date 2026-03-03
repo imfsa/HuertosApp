@@ -28,7 +28,7 @@ namespace HuertosApp.Services
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // URL del servicio para Fertirriego
-                var url = "http://179.61.13.234:8089/ws_huertosapp/registro_fertirriego.php";
+                var url = "https://api.imf.cl:8443/huertosapp/registro_fertirriego.php";
                 var response = await client.PostAsync(url, content);
 
                 if (response.IsSuccessStatusCode)
@@ -133,7 +133,7 @@ namespace HuertosApp.Services
                 };
                 var content = new FormUrlEncodedContent(data);
 
-                var url = "http://179.61.13.234:8089/ws_huertosapp/recibir_fotos.php"; // URL exclusiva para fotos
+                var url = "https://api.imf.cl:8443/huertosapp/recibir_fotos.php"; // URL exclusiva para fotos
                 var response = await client.PostAsync(url, content);
 
                 if (response.IsSuccessStatusCode)

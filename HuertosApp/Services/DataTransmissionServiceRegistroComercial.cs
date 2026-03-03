@@ -30,7 +30,7 @@ namespace HuertosApp.Services
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 // URL del servicio para Registro Comercial
-                var url = "http://179.61.13.234:8089/ws_huertosapp/registro_comercial.php";
+                var url = "https://api.imf.cl:8443/huertosapp/registro_comercial.php";
 
                 // Enviar solicitud POST al servidor
                 var response = await client.PostAsync(url, content);
