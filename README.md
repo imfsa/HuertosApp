@@ -1,4 +1,8 @@
 # HuertosApp
+![.NET MAUI](https://img.shields.io/badge/.NET%20MAUI-9.0-512BD4?logo=.net)
+![Android](https://img.shields.io/badge/Android-21%2B-3DDC84?logo=android)
+![Version](https://img.shields.io/badge/version-4.0-blue)
+
 
 Aplicación móvil multiplataforma para la gestión de huertos operacionales, desarrollada con .NET MAUI (Target: .NET 9).
 
@@ -75,3 +79,4 @@ Revisa el archivo `LICENSE` en la raíz del repositorio si está presente o cons
 ---
 
 Si quieres, puedo añadir badges, instrucciones de CI, o una guía rápida de debugging.
+
